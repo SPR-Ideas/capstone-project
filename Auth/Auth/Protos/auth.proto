@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "Auth.Protos";
+
+package Auth;
+
+service auth {
+    rpc getCredentials(userCredentials) returns (tokenResponse);
+    rpc addCredentials(userCredentials) returns (statusResponse);
+}
+
+message userCredentials{
+    string UserName = 1;
+    string Password = 2;
+    bool IsExternal = 3;
+}
+
+message tokenResponse {
+    string Token =1;
+    bool IsExternal = 2;
+}
+
+message statusResponse {
+    bool status = 1;
+}
