@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option csharp_namespace = "inventory.Protos";
+
+package inventory;
+
+message userInstance {
+    int32 Id = 1;
+    string UserName = 2;
+    string Name =3;
+    int32 Age = 4;
+    string Role = 5;
+    string BattingStyle = 6;
+    string BlowingStyle = 7;
+}
+
+message userInstanceRequest{
+    int32 Id = 1;
+    string UserName = 2;
+    string Password = 8;
+    string Name =3;
+    int32 Age = 4;
+    string Role = 5;
+    string BattingStyle = 6;
+    string BlowingStyle = 7;
+}
+
+message teamMemberInstance{
+    int32 Id = 1;
+    userInstance user = 2;
+    bool IsCaptain = 3;
+    bool IsPlaying =4;
+}
+
+message teamInstance{
+    int32 Id = 1;
+    string Name = 2;
+    repeated teamMemberInstance Members =3;
+}
+
+message inventoryData{
+    userInstance user =1;
+    repeated teamInstance teams = 2;
+}
+
+message statusResponse {
+    bool status = 1;
+}
+

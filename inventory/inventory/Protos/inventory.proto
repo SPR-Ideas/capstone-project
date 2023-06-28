@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "inventory.Protos";
+
+package inventory;
+
+
+import "Protos/messages.proto";
+service inventory{
+    rpc createUser(userInstanceRequest) returns (statusResponse);
+    rpc updateUser (userInstance) returns (statusResponse);
+
+    rpc getInventory(userInstance) returns (inventoryData);
+
+    rpc createTeam(teamInstance) returns (teamInstance);
+    rpc updateTeam(teamInstance) returns (statusResponse);
+
+    // need to write update leaderboard
+}
