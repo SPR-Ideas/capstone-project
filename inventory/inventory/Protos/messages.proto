@@ -7,6 +7,7 @@ package inventory;
 message userInstance {
     int32 Id = 1;
     string UserName = 2;
+    string Password = 8;
     string Name =3;
     int32 Age = 4;
     string Role = 5;

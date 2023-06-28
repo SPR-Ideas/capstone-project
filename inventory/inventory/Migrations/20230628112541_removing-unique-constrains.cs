@@ -5,7 +5,7 @@
 namespace inventory.Migrations
 {
     /// <inheritdoc />
-    public partial class intitalmigration : Migration
+    public partial class removinguniqueconstrains : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +30,7 @@ namespace inventory.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Age = table.Column<int>(type: "int", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BattingStyles = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -101,13 +101,6 @@ namespace inventory.Migrations
                 name: "IX_TeamMembers_userId",
                 table: "TeamMembers",
                 column: "userId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_UserName",
-                table: "Users",
-                column: "UserName",
-                unique: true,
-                filter: "[UserName] IS NOT NULL");
         }
 
         /// <inheritdoc />

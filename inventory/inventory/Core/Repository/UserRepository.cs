@@ -6,9 +6,9 @@ namespace inventory.Core.Repository
 {
     public class UserRepository : GenericReposistory<UsersModels>,IUserRepository
     {
-        private readonly ApplicationDbContext _context;
+
         public UserRepository(ApplicationDbContext context):base(context){
-            _context = context;
+
             this._dbset = _context.Set<UsersModels>();
         }
 

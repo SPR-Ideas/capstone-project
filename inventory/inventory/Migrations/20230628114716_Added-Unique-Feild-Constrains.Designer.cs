@@ -12,8 +12,8 @@ using inventory.Data;
 namespace inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230627080044_intital-migration")]
-    partial class intitalmigration
+    [Migration("20230628114716_Added-Unique-Feild-Constrains")]
+    partial class AddedUniqueFeildConstrains
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -11,34 +11,34 @@ namespace inventory.Services
     {
 
         private readonly UnitOfWork _unitOfWork;
-        public InventoryService(UnitOfWork unitOfWork) {
-            Console.WriteLine("\nconstructor");
-            _unitOfWork = unitOfWork;
+        public InventoryService(ApplicationDbContext context) {
+
+            _unitOfWork = new UnitOfWork(context);
         }
 
-        public override async Task<statusResponse> createUser(userInstanceRequest request, ServerCallContext context)
+        public override async Task<statusResponse> createUser(userInstance request, ServerCallContext context)
         {
-            Console.WriteLine(request.UserName);
-            UsersModels user = new UsersModels(){
-                UserName = request.UserName,
-                Age = request.Age,
-                Name = request.Name,
-                Role = request.Role,
-                BlowingStyles = request.BlowingStyle,
-                BattingStyles = request.BattingStyle,
-            };
+            bool _status = true;
+            try{
+                UsersModels _user  = (UsersModels)request;
+                _user.Id = request.Id;
 
-            // bool _status = await _unitOfWork.Users.Add(user);
-            // await _unitOfWork.CompleteAsync();
-            return new statusResponse { Status = true };
+                await _unitOfWork.Users.Add(_user);
+                await _unitOfWork.CompleteAsync();
+            }
+            catch (Exception){
+                _status = false;
+            }
+            return new statusResponse { Status = _status};
         }
 
         public override async Task<inventoryData> getInventory(userInstance request, ServerCallContext context)
         {
-            userInstance _user = (userInstance) await _unitOfWork.Users.GetById(request.Id);
-            ICollection<teamInstance> _teams = (ICollection<teamInstance>) await _unitOfWork.Users.GetUserTeams(request.Id);
+            // userInstance _user = (userInstance) await _unitOfWork.Users.GetById(request.Id);
 
-            inventoryData response = new inventoryData(){User = _user};
+
+            ICollection<teamInstance> _teams = (ICollection<teamInstance>) await _unitOfWork.Users.GetUserTeams(request.Id);
+            inventoryData response = new inventoryData();
             response.Teams.Add(_teams);
 
             return response;
@@ -49,10 +49,16 @@ namespace inventory.Services
             bool _status = true;
 
             try{
-                _unitOfWork.Users.Update((UsersModels)request);
+                UsersModels _user  = (UsersModels)request;
+                _user.Id = request.Id;
+
+                await _unitOfWork.Users.Update(_user);
                 await _unitOfWork.CompleteAsync();
             }
-            catch(Exception ){_status = false;}
+            catch(Exception e ){
+                Console.WriteLine(e);
+                _status = false;
+            }
 
             return new statusResponse{Status = _status};
         }
@@ -60,7 +66,10 @@ namespace inventory.Services
         public override async Task<teamInstance> createTeam(teamInstance request, ServerCallContext context)
         {
             try{
-                await _unitOfWork.Team.Add((TeamModel) request);
+                TeamModel _team  = (TeamModel)request;
+                _team.Id = request.Id;
+
+                await _unitOfWork.Team.Add(_team);
                 await _unitOfWork.CompleteAsync();
             }
             catch(Exception){
@@ -73,7 +82,9 @@ namespace inventory.Services
         {
             bool _status = true;
             try{
-                _unitOfWork.Team.Update((TeamModel)request);
+                 TeamModel _team  = (TeamModel)request;
+                _team.Id = request.Id;
+                await _unitOfWork.Team.Update(_team);
                 await _unitOfWork.CompleteAsync();
             }
             catch(Exception){

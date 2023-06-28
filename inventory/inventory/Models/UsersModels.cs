@@ -1,4 +1,5 @@
 
+using System.Globalization;
 using System.ComponentModel.DataAnnotations;
 using inventory.Protos;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,16 @@ namespace inventory.Models
 
         public static explicit operator UsersModels(userInstance v)
         {
-            throw new NotImplementedException();
+            UsersModels user = new UsersModels();
+            
+            user.UserName = v.UserName;
+            user.Name = v.Name;
+            user.Age = v.Age;
+            user.BattingStyles = v.BattingStyle;
+            user.BlowingStyles  = v.BlowingStyle;
+            user.Role = v.Role;
+
+            return user;
         }
     }
 }

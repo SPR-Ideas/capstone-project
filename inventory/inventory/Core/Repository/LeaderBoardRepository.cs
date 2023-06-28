@@ -7,16 +7,17 @@ namespace inventory.Core.Repository
 {
     public class LeaderBoardRepository : GenericReposistory<LeaderboardModel>,ILeaderBoardRespository
     {
-
+        // private readonly ApplicationDbContext _context;
         public LeaderBoardRepository(ApplicationDbContext context):base(context){
-            this._dbset =  context.Set<LeaderboardModel>();
+            // _context = context;
+           this._dbset =  context.Set<LeaderboardModel>();
         }
 
-        public override LeaderboardModel Update(LeaderboardModel entity)
+        public override async Task<LeaderboardModel?> Update(LeaderboardModel entity)
         {
-            this._dbset.Include(LB=>LB.User);
+            this._dbset.Include(board=>board.User);
             this._dbset.Update(entity);
-            return entity;
+            return await Task.FromResult(entity);
         }
     }
 }

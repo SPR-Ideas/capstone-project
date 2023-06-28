@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using inventory.Protos;
-
+using Google.Protobuf.Collections;
 namespace inventory.Models
 {
     public class TeamModel
@@ -12,7 +12,26 @@ namespace inventory.Models
 
         public static explicit operator TeamModel(teamInstance v)
         {
-            throw new NotImplementedException();
+            TeamModel team = new TeamModel(){
+
+                Name = v.Name,
+                Members = convertTeamMembersModel(v.Members)
+            };
+
+            return team;
+        }
+
+        public static List<TeamMemberModel>? convertTeamMembersModel(RepeatedField<teamMemberInstance> Players){
+
+            List<TeamMemberModel> _players = new List<TeamMemberModel>();
+            foreach(var player in Players) {
+                _players.Add(new TeamMemberModel{
+                    Id = player.Id,
+                    user = (UsersModels) player.User,
+                    IsCaptain = player.IsCaptain,
+                });
+            }
+            return _players;
         }
     }
 }

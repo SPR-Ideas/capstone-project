@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
@@ -42,5 +43,12 @@ namespace inventory.Core.Repository
             return true;
         }
 
+        public override async Task<TeamModel?> Update(TeamModel entity)
+        {
+            await _dbset.Include(x=>x.Members)!.ThenInclude(y=>y.user).ToListAsync();
+            _dbset.Update(entity);
+
+            return await Task.FromResult(entity);
+        }
     }
 }

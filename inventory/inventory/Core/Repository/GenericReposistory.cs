@@ -8,9 +8,10 @@ namespace inventory.Core.Repository
     {
 
         internal DbSet<T> _dbset;
+        protected readonly ApplicationDbContext _context;
         public GenericReposistory(ApplicationDbContext context){
+            _context = context;
             _dbset = context.Set<T>();
-
         }
 
         public virtual async Task<bool> Add(T entity)
@@ -37,10 +38,13 @@ namespace inventory.Core.Repository
         }
 
 
-        public virtual T Update(T entity)
+        public virtual  async Task<T?> Update(T entity)
         {
             _dbset.Update(entity);
-            return entity;
+
+            return await Task.FromResult( entity);
         }
+
+
     }
 }
