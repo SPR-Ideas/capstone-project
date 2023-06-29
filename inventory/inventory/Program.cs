@@ -1,4 +1,5 @@
-using inventory.Core;
+
+using AutoMapper;
 using inventory.Data;
 using inventory.Services;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,15 @@ namespace inventory
             builder.Services.AddGrpc();
             builder.Services.AddGrpcReflection();
             builder.Services.AddGrpcHttpApi();
+            // builder.Services.AddAutoMapper(typeof(Program).Assembly);
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
             builder.Services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(
                     builder.Configuration.GetConnectionString("LocalDb")
                 )
             );
+
             // builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 

@@ -21,7 +21,7 @@ namespace inventory.Models
         public static explicit operator UsersModels(userInstance v)
         {
             UsersModels user = new UsersModels();
-            
+            if(v.Id!=0){user.Id = v.Id;}
             user.UserName = v.UserName;
             user.Name = v.Name;
             user.Age = v.Age;

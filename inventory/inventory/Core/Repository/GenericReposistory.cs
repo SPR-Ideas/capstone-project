@@ -1,5 +1,6 @@
 
 using inventory.Data;
+using inventory.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace inventory.Core.Repository
@@ -45,6 +46,7 @@ namespace inventory.Core.Repository
             return await Task.FromResult( entity);
         }
 
+        
 
     }
 }

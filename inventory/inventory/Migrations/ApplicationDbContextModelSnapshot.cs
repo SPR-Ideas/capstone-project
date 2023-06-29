@@ -63,14 +63,12 @@ namespace inventory.Migrations
                     b.Property<int?>("TeamModelId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("userId")
+                    b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TeamModelId");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("TeamMembers");
                 });
@@ -82,6 +80,9 @@ namespace inventory.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Count")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -140,12 +141,6 @@ namespace inventory.Migrations
                     b.HasOne("inventory.Models.TeamModel", null)
                         .WithMany("Members")
                         .HasForeignKey("TeamModelId");
-
-                    b.HasOne("inventory.Models.UsersModels", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("inventory.Models.TeamModel", b =>

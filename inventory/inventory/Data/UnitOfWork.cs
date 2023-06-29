@@ -1,6 +1,6 @@
 using inventory.Core;
 using inventory.Core.Repository;
-
+using AutoMapper;
 namespace inventory.Data
 {
     public class UnitOfWork : IUnitOfWork , IDisposable
@@ -14,16 +14,17 @@ namespace inventory.Data
         private readonly ApplicationDbContext _context;
 
 
-        public UnitOfWork(ApplicationDbContext context){
+        public UnitOfWork(ApplicationDbContext context,IMapper mapper){
             _context = context;
             Users = new UserRepository(_context);
-            Team = new TeamRepository(_context);
+            Team = new TeamRepository(_context,mapper);
             LeaderBoard = new LeaderBoardRepository(_context);
         }
 
         public async Task CompleteAsync()
         {
             await _context.SaveChangesAsync();
+
         }
 
 

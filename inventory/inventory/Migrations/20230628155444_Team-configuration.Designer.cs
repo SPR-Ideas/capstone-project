@@ -12,8 +12,8 @@ using inventory.Data;
 namespace inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230628114716_Added-Unique-Feild-Constrains")]
-    partial class AddedUniqueFeildConstrains
+    [Migration("20230628155444_Team-configuration")]
+    partial class Teamconfiguration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,14 +66,12 @@ namespace inventory.Migrations
                     b.Property<int?>("TeamModelId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("userId")
+                    b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TeamModelId");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("TeamMembers");
                 });
@@ -143,12 +141,6 @@ namespace inventory.Migrations
                     b.HasOne("inventory.Models.TeamModel", null)
                         .WithMany("Members")
                         .HasForeignKey("TeamModelId");
-
-                    b.HasOne("inventory.Models.UsersModels", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("inventory.Models.TeamModel", b =>

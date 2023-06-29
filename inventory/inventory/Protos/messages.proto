@@ -28,7 +28,7 @@ message userInstanceRequest{
 
 message teamMemberInstance{
     int32 Id = 1;
-    userInstance user = 2;
+    int32 userId = 2;
     bool IsCaptain = 3;
     bool IsPlaying =4;
 }
@@ -37,14 +37,34 @@ message teamInstance{
     int32 Id = 1;
     string Name = 2;
     repeated teamMemberInstance Members =3;
+    int32 Count = 4;
 }
 
 message inventoryData{
     userInstance user =1;
-    repeated teamInstance teams = 2;
+    repeated teamInstanceWithUser teams = 2;
 }
 
 message statusResponse {
     bool status = 1;
 }
 
+message teamMemberWithUsers{
+    int32 Id = 1;
+    userInstance user = 2;
+    bool IsCaptain = 3;
+    bool IsPlaying =4;
+}
+
+message teamInstanceWithUser{
+    int32 Id = 1;
+    string Name = 2;
+    repeated teamMemberWithUsers Members =3;
+    int32 Count = 4;
+
+}
+
+message makeCaptainInstance{
+    int32 UserId=1;
+    int32 TeamId=2;
+}

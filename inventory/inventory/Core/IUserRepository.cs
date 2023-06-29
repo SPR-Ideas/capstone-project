@@ -6,5 +6,6 @@ namespace inventory.Core
     {
         Task<ICollection<UsersModels>?> SearchByNameOrUserName(string SearchString);
         Task<ICollection<TeamModel>> GetUserTeams(int Id);
+
     }
 }

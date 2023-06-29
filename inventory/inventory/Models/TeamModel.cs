@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using System.ComponentModel.DataAnnotations;
 using inventory.Protos;
 using Google.Protobuf.Collections;
@@ -9,13 +10,15 @@ namespace inventory.Models
         public int Id { get; set; }
         public string? Name { get; set; }
         public List<TeamMemberModel>? Members { get; set; }
+        public int Count { get; set; }
 
         public static explicit operator TeamModel(teamInstance v)
         {
             TeamModel team = new TeamModel(){
-
                 Name = v.Name,
-                Members = convertTeamMembersModel(v.Members)
+                Id = (v.Id ==0)?0:v.Id,
+                Members = convertTeamMembersModel(v.Members),
+                Count =v.Members.Count
             };
 
             return team;
@@ -25,11 +28,13 @@ namespace inventory.Models
 
             List<TeamMemberModel> _players = new List<TeamMemberModel>();
             foreach(var player in Players) {
-                _players.Add(new TeamMemberModel{
+                TeamMemberModel team = new TeamMemberModel{
                     Id = player.Id,
-                    user = (UsersModels) player.User,
+                    userId =  player.UserId,
                     IsCaptain = player.IsCaptain,
-                });
+                };
+
+                _players.Add(team);
             }
             return _players;
         }

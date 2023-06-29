@@ -18,10 +18,12 @@ namespace inventory.Core.Repository
         }
 
         public async Task<ICollection<TeamModel>?> GetUserTeams(int Id){
-            return await _context.Teams!.
+
+            return await _context.Teams!.Include(t=>t.Members).
                     Where(team => team.Members!.Any(
-                        member => member.user!.Id == Id
+                        member => member.userId == Id
                     )).ToListAsync();
         }
+
     }
 }

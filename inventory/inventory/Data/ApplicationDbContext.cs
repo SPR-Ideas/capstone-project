@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using inventory.Models;
+
 namespace inventory.Data
 {
     public class ApplicationDbContext :DbContext
@@ -12,5 +13,7 @@ namespace inventory.Data
         public DbSet<TeamModel>? Teams { get; set; }
         public DbSet<TeamMemberModel>? TeamMembers { get; set; }
         public DbSet<LeaderboardModel>? LeaderBoard { get; set; }
+
+
     }
 }

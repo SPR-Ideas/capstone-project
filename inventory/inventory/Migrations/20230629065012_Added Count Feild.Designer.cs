@@ -12,8 +12,8 @@ using inventory.Data;
 namespace inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230628112541_removing-unique-constrains")]
-    partial class removinguniqueconstrains
+    [Migration("20230629065012_Added Count Feild")]
+    partial class AddedCountFeild
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,14 +66,12 @@ namespace inventory.Migrations
                     b.Property<int?>("TeamModelId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("userId")
+                    b.Property<int>("userId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TeamModelId");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("TeamMembers");
                 });
@@ -85,6 +83,9 @@ namespace inventory.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Count")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -118,9 +119,13 @@ namespace inventory.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserName")
+                        .IsUnique()
+                        .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
@@ -139,12 +144,6 @@ namespace inventory.Migrations
                     b.HasOne("inventory.Models.TeamModel", null)
                         .WithMany("Members")
                         .HasForeignKey("TeamModelId");
-
-                    b.HasOne("inventory.Models.UsersModels", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("inventory.Models.TeamModel", b =>
