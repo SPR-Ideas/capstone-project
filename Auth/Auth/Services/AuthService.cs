@@ -12,7 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace Auth.Services
 {
-    public class AuthService : auth.authBase
+    public class AuthService : authService.authServiceBase
     {
         private readonly IUnitOfWork _unitOfWork ;
         private readonly IConfiguration _configuration;

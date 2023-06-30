@@ -18,3 +18,14 @@ service inventory{
 
     // need to write update leaderboard
 }
+
+message userCredentials{
+    string UserName = 1;
+    string Password = 2;
+    bool IsExternal = 3;
+}
+
+message tokenResponse {
+    string Token =1;
+    bool IsExternal = 2;
+}

@@ -12,6 +12,7 @@ namespace inventory.Data.Configuration
             CreateMap<UsersModels, userInstance>();
             CreateMap<TeamModel , teamInstance>();
             CreateMap<TeamMemberModel,teamMemberInstance>();
+            
             // Define mappings for other models as needed
         }
 }

@@ -8,6 +8,7 @@ message userInstance {
     int32 Id = 1;
     string UserName = 2;
     string Password = 8;
+    bool IsExternal = 9;
     string Name =3;
     int32 Age = 4;
     string Role = 5;
@@ -68,3 +69,4 @@ message makeCaptainInstance{
     int32 UserId=1;
     int32 TeamId=2;
 }
+

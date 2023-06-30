@@ -1,11 +1,13 @@
-
-using System.Net.Cache;
 using Grpc.Core;
-using inventory.Core;
+using Grpc.Net.Client;
 using inventory.Data;
 using inventory.Protos;
 using inventory.Models;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using AuthService = Auth.Protos.authService;
+using AuthProto = Auth.Protos;
+
+
+
 using AutoMapper;
 
 namespace inventory.Services
@@ -13,11 +15,18 @@ namespace inventory.Services
     public class InventoryService : Protos.inventory.inventoryBase
     {
 
-        private readonly UnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public InventoryService(ApplicationDbContext context,IMapper mapper) {
+        private  readonly UnitOfWork _unitOfWork;
+        private  readonly IMapper _mapper;
+        private  readonly AuthService.authServiceClient _authClient;
+
+        public InventoryService(
+            ApplicationDbContext context
+            ,IMapper mapper,
+            AuthService.authServiceClient authClient
+            ) {
             _mapper = mapper;
             _unitOfWork = new UnitOfWork(context,mapper);
+            _authClient = authClient;
         }
 
 
@@ -28,8 +37,19 @@ namespace inventory.Services
                 UsersModels _user  = (UsersModels)request;
                 _user.Id = request.Id;
 
-                await _unitOfWork.Users.Add(_user);
-                await _unitOfWork.CompleteAsync();
+                var response = await _authClient.addCredentialsAsync(
+                    new AuthProto.userCredentials{
+                        UserName =request.UserName,
+                        Password = request.Password,
+                        IsExternal = request.IsExternal
+                        }
+                );
+
+                if(response.Status == true){
+                    await _unitOfWork.Users.Add(_user);
+                    await _unitOfWork.CompleteAsync();
+                }
+                else{throw new Exception();}
             }
             catch (Exception){
                 _status = false;
@@ -42,6 +62,7 @@ namespace inventory.Services
         {
             userInstance _user = _mapper.Map<userInstance>( await _unitOfWork.Users.GetById(request.Id));
             var temp = await _unitOfWork.Users.GetUserTeams(request.Id);
+
             List<teamInstanceWithUser>teams = await _unitOfWork.Team.ReturnTeamsWithPlayerInstance(temp.ToList());
 
             inventoryData response = new inventoryData(){User = _user};
