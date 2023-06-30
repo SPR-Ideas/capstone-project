@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using inventory.Protos;
+
 namespace inventory.Models
 {
     public class LeaderboardModel

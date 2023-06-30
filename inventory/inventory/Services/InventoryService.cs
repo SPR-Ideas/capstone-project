@@ -7,7 +7,6 @@ using AuthService = Auth.Protos.authService;
 using AuthProto = Auth.Protos;
 
 
-
 using AutoMapper;
 
 namespace inventory.Services
@@ -37,6 +36,7 @@ namespace inventory.Services
                 UsersModels _user  = (UsersModels)request;
                 _user.Id = request.Id;
 
+                // Communicating with auth Authorization Server
                 var response = await _authClient.addCredentialsAsync(
                     new AuthProto.userCredentials{
                         UserName =request.UserName,
@@ -45,13 +45,16 @@ namespace inventory.Services
                         }
                 );
 
+                // Based on the status we gonna add the user model.
                 if(response.Status == true){
+                    // await _unitOfWork.LeaderBoard.Add((LeaderboardModel)request);
                     await _unitOfWork.Users.Add(_user);
                     await _unitOfWork.CompleteAsync();
                 }
                 else{throw new Exception();}
             }
             catch (Exception){
+                // If any exception is thrown returns status as failed.
                 _status = false;
             }
             return new statusResponse { Status = _status};
@@ -67,8 +70,7 @@ namespace inventory.Services
 
             inventoryData response = new inventoryData(){User = _user};
             response.Teams.Add(teams);
-
-            return response;
+            return response; // returns invetory data.
         }
 
 

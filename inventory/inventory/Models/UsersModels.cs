@@ -17,7 +17,7 @@ namespace inventory.Models
         public string? Role { get; set; }
         public string? BattingStyles { get; set; }
         public string? BlowingStyles {get;set;}
-
+        public LeaderboardModel? Leaderboard { get; set; }
         public static explicit operator UsersModels(userInstance v)
         {
             UsersModels user = new UsersModels();

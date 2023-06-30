@@ -7,6 +7,6 @@ namespace inventory.Core
 {
     public interface ILeaderBoardRespository : IGenericRepository<LeaderboardModel>
     {
-
+        
     }
 }
