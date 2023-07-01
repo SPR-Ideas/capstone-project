@@ -1,8 +1,10 @@
 using System.Xml;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.Models
 {
+    [Index(nameof(Username),IsUnique = true)]
     public class CredentialsModel
     {
         [Key]

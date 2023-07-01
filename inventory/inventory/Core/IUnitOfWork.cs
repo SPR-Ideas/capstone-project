@@ -8,9 +8,9 @@ namespace inventory.Core
     public interface IUnitOfWork
     {
         IUserRepository Users{get;}
-        ILeaderBoardRespository LeaderBoard {get;}
+        // ILeaderBoardRespository LeaderBoard {get;}
         ITeamRepository Team {get;}
-
+        ILeaderBoardRespository LeaderBoard {get;}
         Task CompleteAsync();
 
 

@@ -5,7 +5,7 @@
 namespace Auth.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class CredentialMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

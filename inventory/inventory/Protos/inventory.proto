@@ -7,25 +7,23 @@ package inventory;
 
 import "Protos/messages.proto";
 service inventory{
+    rpc getInventory(userInstance) returns (inventoryData);
+
+    //User Services
     rpc createUser(userInstance) returns (statusResponse);
     rpc updateUser (userInstance) returns (statusResponse);
 
-    rpc getInventory(userInstance) returns (inventoryData);
-
+    // Team Services
     rpc createTeam(teamInstance) returns (teamInstance);
     rpc updateTeam(teamInstance) returns (statusResponse);
     rpc makeCaptain(makeCaptainInstance) returns (statusResponse);
 
-    // need to write update leaderboard
+    // leaderboard Services.
+    rpc updateUserPerformances(ListOfUser) returns (statusResponse);
+    rpc getLeaderBoard(LeaderBoardRequest) returns (ListOfUser);
+
+    // Match Services
+    rpc  createMatch(MatchInstance) returns (statusResponse);
+    rpc  completeMatch(MatchInstance) returns (statusResponse);
 }
 
-message userCredentials{
-    string UserName = 1;
-    string Password = 2;
-    bool IsExternal = 3;
-}
-
-message tokenResponse {
-    string Token =1;
-    bool IsExternal = 2;
-}

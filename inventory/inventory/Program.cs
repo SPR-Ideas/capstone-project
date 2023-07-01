@@ -1,8 +1,5 @@
-
-using AutoMapper;
 using Grpc.Net.Client;
 using inventory.Data;
-using inventory.Protos;
 using inventory.Services;
 using Microsoft.EntityFrameworkCore;
 using AuthProto = Auth.Protos.authService;
@@ -22,7 +19,7 @@ namespace inventory
             builder.Services.AddGrpc();
             builder.Services.AddGrpcReflection();
             builder.Services.AddGrpcHttpApi();
-            // builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
             builder.Services.AddDbContext<ApplicationDbContext>(
@@ -31,7 +28,6 @@ namespace inventory
                 )
             );
 
-            // builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var AuthChannel = GrpcChannel.ForAddress(
                                     "http://localhost:5218");
             var client = new AuthProto.authServiceClient(AuthChannel);
@@ -42,7 +38,7 @@ namespace inventory
 
             // Configure the HTTP request pipeline.
             app.MapGrpcService<InventoryService>();
-            // app.MapGrpcService<auth.authClient>();
+
             app.MapGrpcReflectionService();
 
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

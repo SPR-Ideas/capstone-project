@@ -32,6 +32,7 @@ namespace inventory.Models
                     Id = player.Id,
                     userId =  player.UserId,
                     IsCaptain = player.IsCaptain,
+                    IsPlaying = player.IsPlaying,
                 };
 
                 _players.Add(team);

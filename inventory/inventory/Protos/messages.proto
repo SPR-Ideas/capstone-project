@@ -7,13 +7,16 @@ package inventory;
 message userInstance {
     int32 Id = 1;
     string UserName = 2;
-    string Password = 8;
-    bool IsExternal = 9;
     string Name =3;
     int32 Age = 4;
     string Role = 5;
-    string BattingStyle = 6;
-    string BlowingStyle = 7;
+    string BattingStyles = 6;
+    string BlowingStyles = 7;
+    string Password = 8;
+    bool IsExternal = 9;
+    int32 Runs = 10;
+    int32 Wickets = 11;
+    int32 Matches = 12;
 }
 
 message userInstanceRequest{
@@ -68,5 +71,26 @@ message teamInstanceWithUser{
 message makeCaptainInstance{
     int32 UserId=1;
     int32 TeamId=2;
+}
+
+message LeaderBoardRequest{
+    int32 Page=1;
+    bool Mode = 2;
+}
+
+message ListOfUser{
+    repeated userInstance users = 1;
+}
+
+message MatchInstance{
+    int32 Id = 1;
+    int32 HostTeam_id = 2;
+    int32 VisitorTeam_id = 3;
+    int32 Overs = 4;
+    int32 Wickets = 5;
+    int32 VictoryTeam_id = 6;
+    int64 StartDate = 7;
+    bool IsCompleted = 8;
+    int32 ScoreCardId = 9;
 }
 

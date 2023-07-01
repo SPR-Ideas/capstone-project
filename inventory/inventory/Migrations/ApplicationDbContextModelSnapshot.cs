@@ -22,30 +22,6 @@ namespace inventory.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("inventory.Models.LeaderboardModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Runs")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Wickets")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("LeaderBoard");
-                });
-
             modelBuilder.Entity("inventory.Models.TeamMemberModel", b =>
                 {
                     b.Property<int>("Id")
@@ -81,7 +57,7 @@ namespace inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Count")
+                    b.Property<int>("Count")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -109,14 +85,23 @@ namespace inventory.Migrations
                     b.Property<string>("BlowingStyles")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Matches")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Runs")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Wickets")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -125,15 +110,6 @@ namespace inventory.Migrations
                         .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("inventory.Models.LeaderboardModel", b =>
-                {
-                    b.HasOne("inventory.Models.UsersModels", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("inventory.Models.TeamMemberModel", b =>

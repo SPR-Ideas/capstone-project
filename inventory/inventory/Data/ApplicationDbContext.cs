@@ -12,8 +12,7 @@ namespace inventory.Data
         public DbSet<UsersModels>? Users { get; set; }
         public DbSet<TeamModel>? Teams { get; set; }
         public DbSet<TeamMemberModel>? TeamMembers { get; set; }
-        public DbSet<LeaderboardModel>? LeaderBoard { get; set; }
-
+        public DbSet<MatchModels>? Matches { get; set; }
 
     }
 }

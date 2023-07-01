@@ -12,8 +12,8 @@ using inventory.Data;
 namespace inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230628155444_Team-configuration")]
-    partial class Teamconfiguration
+    [Migration("20230630091426_New Approach for leaderboard")]
+    partial class NewApproachforleaderboard
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,30 +24,6 @@ namespace inventory.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("inventory.Models.LeaderboardModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Runs")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Wickets")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("LeaderBoard");
-                });
 
             modelBuilder.Entity("inventory.Models.TeamMemberModel", b =>
                 {
@@ -84,6 +60,9 @@ namespace inventory.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -109,14 +88,23 @@ namespace inventory.Migrations
                     b.Property<string>("BlowingStyles")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Matches")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Runs")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Wickets")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -125,15 +113,6 @@ namespace inventory.Migrations
                         .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("inventory.Models.LeaderboardModel", b =>
-                {
-                    b.HasOne("inventory.Models.UsersModels", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("inventory.Models.TeamMemberModel", b =>

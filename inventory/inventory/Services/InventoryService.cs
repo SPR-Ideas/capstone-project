@@ -18,11 +18,7 @@ namespace inventory.Services
         private  readonly IMapper _mapper;
         private  readonly AuthService.authServiceClient _authClient;
 
-        public InventoryService(
-            ApplicationDbContext context
-            ,IMapper mapper,
-            AuthService.authServiceClient authClient
-            ) {
+        public InventoryService(ApplicationDbContext context,IMapper mapper,AuthService.authServiceClient authClient) {
             _mapper = mapper;
             _unitOfWork = new UnitOfWork(context,mapper);
             _authClient = authClient;
@@ -31,7 +27,6 @@ namespace inventory.Services
 
         public override async Task<statusResponse> createUser(userInstance request, ServerCallContext context)
         {
-            bool _status = true;
             try{
                 UsersModels _user  = (UsersModels)request;
                 _user.Id = request.Id;
@@ -46,18 +41,17 @@ namespace inventory.Services
                 );
 
                 // Based on the status we gonna add the user model.
-                if(response.Status == true){
+                if(response.Status){
                     // await _unitOfWork.LeaderBoard.Add((LeaderboardModel)request);
                     await _unitOfWork.Users.Add(_user);
                     await _unitOfWork.CompleteAsync();
                 }
                 else{throw new Exception();}
+                return new statusResponse{Status=true};
             }
             catch (Exception){
-                // If any exception is thrown returns status as failed.
-                _status = false;
+                return new statusResponse { Status = false};
             }
-            return new statusResponse { Status = _status};
         }
 
 
@@ -66,7 +60,7 @@ namespace inventory.Services
             userInstance _user = _mapper.Map<userInstance>( await _unitOfWork.Users.GetById(request.Id));
             var temp = await _unitOfWork.Users.GetUserTeams(request.Id);
 
-            List<teamInstanceWithUser>teams = await _unitOfWork.Team.ReturnTeamsWithPlayerInstance(temp.ToList());
+            List<teamInstanceWithUser>teams = await _unitOfWork.Team.ReturnTeamsWithPlayerInstance(temp!.ToList());
 
             inventoryData response = new inventoryData(){User = _user};
             response.Teams.Add(teams);
@@ -74,21 +68,18 @@ namespace inventory.Services
         }
 
 
-        public override async Task<statusResponse> updateUser(userInstance request, ServerCallContext context)
-        {
-            bool _status = true;
+        public override async Task<statusResponse> updateUser(userInstance request, ServerCallContext context){
             try{
                 UsersModels _user  = (UsersModels)request;
                 _user.Id = request.Id;
 
                 await _unitOfWork.Users.Update(_user);
                 await _unitOfWork.CompleteAsync();
+                return new statusResponse{Status = true};
             }
-            catch(Exception e ){
-                Console.WriteLine(e);
-                _status = false;
+            catch(Exception ){
+                return new statusResponse{Status = false};
             }
-            return new statusResponse{Status = _status};
         }
 
 
@@ -108,25 +99,22 @@ namespace inventory.Services
         }
 
 
-        public override async Task<statusResponse> updateTeam(teamInstance request, ServerCallContext context)
-        {
-            bool _status = true;
-
+        public override async Task<statusResponse> updateTeam(teamInstance request, ServerCallContext context){
             try{
                  TeamModel _team  = (TeamModel)request;
                 _team.Id = request.Id;
-
                 await _unitOfWork.Team.Update(_team);
-                if(request.Count > request.Members.Count){
+
+                if(request.Count > request.Members.Count)
                     await _unitOfWork.Team.RemovePlayes(request.Id, request.Members.Select(m=>m.Id).ToList());
-                }
+
                 await _unitOfWork.CompleteAsync();
+                return new statusResponse{Status= true};
             }
-            catch(Exception e){
-                Console.WriteLine(e);
-                _status= false;
+            catch(Exception ){
+                return new statusResponse{Status = false};
             }
-            return new statusResponse{Status = _status};
+
         }
 
 
@@ -141,6 +129,52 @@ namespace inventory.Services
             }
             return new statusResponse{Status = true};
         }
-    }
 
+        public override async Task<statusResponse> updateUserPerformances(ListOfUser request, ServerCallContext context)
+        {
+            try{
+                foreach(var user in request.Users){
+               await _unitOfWork.LeaderBoard.UpdateUsersHistory(user.Id, user.Runs,user.Wickets);
+            }
+            await _unitOfWork.CompleteAsync();
+            return new statusResponse{Status=true};
+            }catch(Exception){return new statusResponse{Status=false};}
+        }
+
+        public override async Task<ListOfUser> getLeaderBoard(LeaderBoardRequest request, ServerCallContext context)
+        {
+            ListOfUser response = new ListOfUser();
+            response.Users.Add(
+                request.Mode? // If Mode is ture returns leaderboard based on user with higesh runs.
+                await _unitOfWork.LeaderBoard.GetLeaderboard(request.Page):
+                await _unitOfWork.LeaderBoard.GetLeaderboardWithWicktes(request.Page));
+            return response;
+        }
+
+        public override async Task<statusResponse> completeMatch(MatchInstance request, ServerCallContext context)
+        {
+            try{
+                await _unitOfWork.Match.MatchCompleted(request.Id);
+                await _unitOfWork.CompleteAsync();
+
+                return new statusResponse{Status = true};
+            }catch(Exception){
+                return new statusResponse{Status=false};
+            }
+        }
+
+        public override async Task<statusResponse> createMatch(MatchInstance request, ServerCallContext context)
+        {
+            try{
+
+            //    {
+            //      Communication between MatchService should be implemented.
+            //    }
+                await _unitOfWork.Match.Add(_mapper.Map<MatchModels>(request));
+                await _unitOfWork.CompleteAsync();
+                return new statusResponse{Status = true};
+            }catch(Exception) {return new statusResponse{Status=false};}
+        }
+
+    }
 }

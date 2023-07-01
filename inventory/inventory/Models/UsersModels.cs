@@ -17,7 +17,11 @@ namespace inventory.Models
         public string? Role { get; set; }
         public string? BattingStyles { get; set; }
         public string? BlowingStyles {get;set;}
-        public LeaderboardModel? Leaderboard { get; set; }
+        // public LeaderboardModel? Leaderboard { get; set; }
+        public int Runs { get; set; }
+        public int Wickets { get; set;}
+        public int Matches { get; set; }
+
         public static explicit operator UsersModels(userInstance v)
         {
             UsersModels user = new UsersModels();
@@ -25,9 +29,12 @@ namespace inventory.Models
             user.UserName = v.UserName;
             user.Name = v.Name;
             user.Age = v.Age;
-            user.BattingStyles = v.BattingStyle;
-            user.BlowingStyles  = v.BlowingStyle;
+            user.BattingStyles = v.BattingStyles;
+            user.BlowingStyles  = v.BlowingStyles;
             user.Role = v.Role;
+            user.Wickets = v.Wickets;
+            user.Runs = v.Runs;
+            user.Matches = v.Matches;
 
             return user;
         }

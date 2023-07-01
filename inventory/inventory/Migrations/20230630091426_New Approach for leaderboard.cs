@@ -5,7 +5,7 @@
 namespace inventory.Migrations
 {
     /// <inheritdoc />
-    public partial class Teamconfiguration : Migration
+    public partial class NewApproachforleaderboard : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,8 @@ namespace inventory.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Count = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,7 +35,10 @@ namespace inventory.Migrations
                     Age = table.Column<int>(type: "int", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BattingStyles = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BlowingStyles = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    BlowingStyles = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Runs = table.Column<int>(type: "int", nullable: false),
+                    Wickets = table.Column<int>(type: "int", nullable: false),
+                    Matches = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,31 +66,6 @@ namespace inventory.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "LeaderBoard",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: true),
-                    Runs = table.Column<int>(type: "int", nullable: false),
-                    Wickets = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LeaderBoard", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_LeaderBoard_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LeaderBoard_UserId",
-                table: "LeaderBoard",
-                column: "UserId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_TeamMembers_TeamModelId",
                 table: "TeamMembers",
@@ -103,9 +82,6 @@ namespace inventory.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "LeaderBoard");
-
             migrationBuilder.DropTable(
                 name: "TeamMembers");
 
