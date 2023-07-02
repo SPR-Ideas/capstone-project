@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+option csharp_namespace = "Matches.Protos";
+package Matches;
+message userInstance {
+    int32 Id = 1;
+    string UserName = 2;
+    string Name =3;
+    int32 Age = 4;
+    string Role = 5;
+    string BattingStyles = 6;
+    string BlowingStyles = 7;
+    string Password = 8;
+    bool IsExternal = 9;
+    int32 Runs = 10;
+    int32 Wickets = 11;
+    int32 Matches = 12;
+}
+
+message teamMemberWithUsers{
+    int32 Id = 1;
+    userInstance user = 2;
+    bool IsCaptain = 3;
+    bool IsPlaying =4;
+}
+
+message teamInstanceWithUser{
+    int32 Id = 1;
+    string Name = 2;
+    repeated teamMemberWithUsers Members =3;
+    int32 Count = 4;
+}
+
+message ScoreCardCreateRequest{
+    int32 overs =1;
+    bool IsHostInnings =2;
+    teamInstanceWithUser HostTeam =3;
+    teamInstanceWithUser VisitorTeam=4;
+}
+
+message EachBallRequest{
+    int32 ScoreCardID = 1;
+    int32 Runs =2;
+    string Options =3;
+    int32 BatsmanId = 4;
+    int32 BlowerId = 5;
+    int32 BlowerName = 6;
+}
+
+message statusResponse{
+    bool Status =1;
+}

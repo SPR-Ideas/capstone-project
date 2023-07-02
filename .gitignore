@@ -7,3 +7,9 @@ inventory/.vs
 inventory/inventory/.vscode
 inventory/inventory/bin
 inventory/inventory/obj
+
+
+Matches/.vs
+Matches/Matches/.vscode
+Matches/Matches/bin
+Matches/Matches/obj
