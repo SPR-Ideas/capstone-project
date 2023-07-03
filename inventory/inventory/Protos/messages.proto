@@ -167,3 +167,7 @@ message MatchInstanceResponse{
     string Result = 11;
 }
 
+
+message emptyRequest{
+    
+}

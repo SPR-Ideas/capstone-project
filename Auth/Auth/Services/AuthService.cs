@@ -36,7 +36,7 @@ namespace Auth.Services
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claim,
-                expires: DateTime.Now.AddHours(2),
+                expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: cred
                 ); // Creating Jwt Token
 

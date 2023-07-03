@@ -5,6 +5,9 @@ using Matches.Services;
 using InventoryService = inventory.Protos.inventory;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 // using Matches.Services;
 
 namespace Matches
@@ -26,7 +29,21 @@ namespace Matches
                     builder.Configuration.GetConnectionString("LocalDb")
                 )
             );
-            
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                        builder.Configuration.GetSection("AppSettings:Token").Value!))
+                    };
+
+                });
+
             var inventoryChannel = GrpcChannel.ForAddress(
                                     "http://localhost:5106");
 

@@ -7,7 +7,7 @@ package inventory;
 
 import "Protos/messages.proto";
 service inventory{
-    rpc getInventory(userInstance) returns (inventoryData);
+    rpc getInventory(emptyRequest) returns (inventoryData);
 
     //User Services
     rpc createUser(userInstance) returns (statusResponse);

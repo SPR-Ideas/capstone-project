@@ -2,7 +2,9 @@ using System.Text.RegularExpressions;
 using Grpc.Net.Client;
 using inventory.Data;
 using inventory.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using AuthProto = Auth.Protos.authService;
 using MatchProto = Matches.Protos.Matches;
 
@@ -29,6 +31,22 @@ namespace inventory
                     builder.Configuration.GetConnectionString("LocalDb")
                 )
             );
+            builder.Services.AddAuthorization();
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                    builder.Configuration.GetSection("AppSettings:Token").Value!)),
+                    ValidateLifetime = true,
+                };
+
+            });
+
 
             var AuthChannel = GrpcChannel.ForAddress(
                                     "http://localhost:5218");
@@ -46,6 +64,8 @@ namespace inventory
             app.MapGrpcService<InventoryService>();
 
             app.MapGrpcReflectionService();
+            app.UseAuthorization();
+
 
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

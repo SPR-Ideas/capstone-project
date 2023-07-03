@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -11,6 +12,8 @@ using AuthProto = Auth.Protos;
 
 
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace inventory.Services
 {
@@ -62,18 +65,22 @@ namespace inventory.Services
             }
         }
 
-
-        public override async Task<inventoryData> getInventory(userInstance request, ServerCallContext context)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public override async Task<inventoryData> getInventory(emptyRequest request, ServerCallContext context)
         {
-            userInstance _user = _mapper.Map<userInstance>( await _unitOfWork.Users.GetById(request.Id));
-            var temp = await _unitOfWork.Users.GetUserTeams(request.Id);
+            int UserId = Convert.ToInt32(context.GetHttpContext().User.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.Sid)!.Value);
+            // Console.WriteLine(context.AuthContext.FindPropertiesByName(ClaimTypes.Name).Value);
+            // var cu = ClaimsPrincipal.Current;
+            // Console.WriteLine(cu!.FindFirst(ClaimTypes.Sid));
+            userInstance _user = _mapper.Map<userInstance>( await _unitOfWork.Users.GetById(UserId));
+            var temp = await _unitOfWork.Users.GetUserTeams(UserId);
 
             List<teamInstanceWithUser>teams = await _unitOfWork.Team.ReturnTeamsWithPlayerInstance(temp!.ToList());
 
             inventoryData response = new inventoryData(){User = _user};
             response.Teams.Add(teams);
 
-            response.Matches.Add(await _unitOfWork.Match.getMatchHistory(request.Id));
+            response.Matches.Add(await _unitOfWork.Match.getMatchHistory(UserId ));
             return response; // returns invetory data.
         }
 
