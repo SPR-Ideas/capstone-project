@@ -55,3 +55,53 @@ message statusResponse{
 message scoreCardResponse{
     int32 scoreCardId = 1;
 }
+
+
+
+message scoreCardRequest {
+    int32 Id = 1;
+    int32 Overs = 2;
+    int32 HostTeamId = 3;
+    int32 VisitorTeamId = 4;
+    string HostTeamName = 5;
+    string VisitorTeamName = 6;
+    InningsScoreCardgrpc HostTeamInnings = 7;
+    InningsScoreCardgrpc VisitorTeamInnings = 8;
+    bool IsHostInnings = 9;
+}
+
+message InningsScoreCardgrpc {
+    int32 Id = 1;
+    int32 Wickets = 2;
+    int32 Balls = 3;
+    int32 Score = 4;
+    int32 TotalOver = 5;
+    int32 TotalWickets = 6;
+    bool IsInningsCompleted = 7;
+    repeated BattingInningsgrpc BattingStats = 8;
+    repeated BlowingInningsgrpc BlowingStats = 9;
+}
+
+message BattingInningsgrpc {
+    int32 Id = 1;
+    string DisplayName = 2;
+    int32 UserId = 3;
+    int32 Runs = 4;
+    int32 Balls = 5;
+    int32 Sixer = 6;
+    int32 Four = 7;
+    string BlowedBy = 8;
+    string CaughtBy = 9;
+}
+
+message BlowingInningsgrpc {
+    int32 Id = 1;
+    string DisplayNames = 2;
+    int32 UserId = 3;
+    int32 Runs = 4;
+    int32 Wickets = 5;
+    int32 BallsBlowed = 6;
+}
+message listOfScoreCard{
+    repeated scoreCardRequest scoreCard =1;
+}

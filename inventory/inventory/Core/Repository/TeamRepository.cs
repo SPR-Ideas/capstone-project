@@ -26,9 +26,10 @@ namespace inventory.Core.Repository
             return await this._dbset.FindAsync(Id);
         }
 
-        public override async Task<bool> Add(TeamModel team){
+        public async Task<bool> Add(TeamModel team,int captain){
             try {
                 await this._dbset.Include(team => team.Members).ToListAsync();
+                team.CaptainId = captain;
                 this._dbset.Add(team);
             }
             catch(Exception ) { return false; }

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using AutoMapper;
 using inventory.Models; // Replace with your EF model namespace
 using inventory.Protos; // Replace with your Protos namespace
@@ -23,6 +24,16 @@ namespace inventory.Data.Configuration
             // .ForMember(dest => dest.Members, opt => opt.MapFrom(src => src.Members));
             CreateMap<teamMemberWithUsers,Matches.Protos.teamMemberWithUsers>();
             CreateMap<userInstance,Matches.Protos.userInstance>();
+
+            CreateMap<Matches.Protos.scoreCardRequest,scoreCardRequest>();
+            CreateMap<Matches.Protos.InningsScoreCardgrpc,InningsScoreCardgrpc>();
+            CreateMap<Matches.Protos.BlowingInningsgrpc,BlowingInningsgrpc>();
+            CreateMap<Matches.Protos.BattingInningsgrpc,BattingInningsgrpc>();
+
+            CreateMap<MatchModels,MatchInstanceResponse>()
+            .ForMember(dest => dest.Result, opt => opt.MapFrom(src => src.Result ?? string.Empty));;
+            CreateMap<DateTime, long>().ConvertUsing(d => d.Ticks);
+
         }
 }
 

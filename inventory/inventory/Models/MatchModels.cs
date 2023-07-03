@@ -12,6 +12,7 @@ namespace inventory.Models
         public DateTime StartDate {get; set; }
         public bool IsCompleted {get; set; }
         public int ScoreCardId  {get; set; }
+        public string? Result {get;set;}
     }
 
 }

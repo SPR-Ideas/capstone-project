@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Grpc.Core;
 using Grpc.Net.Client;
 using inventory.Data;
@@ -26,7 +27,7 @@ namespace inventory.Services
                                 MatchService.MatchesClient matchService
                                 ) {
             _mapper = mapper;
-            _unitOfWork = new UnitOfWork(context,mapper);
+            _unitOfWork = new UnitOfWork(context,mapper,matchService);
             _authClient = authClient;
             _matchService = matchService;
         }
@@ -71,6 +72,8 @@ namespace inventory.Services
 
             inventoryData response = new inventoryData(){User = _user};
             response.Teams.Add(teams);
+
+            response.Matches.Add(await _unitOfWork.Match.getMatchHistory(request.Id));
             return response; // returns invetory data.
         }
 
@@ -93,10 +96,11 @@ namespace inventory.Services
         public override async Task<teamInstance> createTeam(teamInstance request, ServerCallContext context)
         {
             try{
+                int captainId = 1;
                 TeamModel _team  = (TeamModel)request;
                 _team.Id = request.Id;
 
-                await _unitOfWork.Team.Add(_team);
+                await _unitOfWork.Team.Add(_team,captainId);
                 await _unitOfWork.CompleteAsync();
             }
             catch(Exception){
@@ -121,7 +125,6 @@ namespace inventory.Services
             catch(Exception ){
                 return new statusResponse{Status = false};
             }
-
         }
 
 
@@ -158,10 +161,10 @@ namespace inventory.Services
             return response;
         }
 
-        public override async Task<statusResponse> completeMatch(MatchInstance request, ServerCallContext context)
+        public override async Task<statusResponse> completeMatch(completMatachRequest request, ServerCallContext context)
         {
             try{
-                await _unitOfWork.Match.MatchCompleted(request.Id);
+                await _unitOfWork.Match.MatchCompleted(request);
                 await _unitOfWork.CompleteAsync();
 
                 return new statusResponse{Status = true};
@@ -193,6 +196,5 @@ namespace inventory.Services
                 Console.WriteLine(e);
                 return new statusResponse{Status=false};}
         }
-
     }
 }

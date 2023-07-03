@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Matches.Core;
 using Matches.Core.Repository;
 using Matches.Models;
+using InventoryService =inventory.Protos.inventory;
 
 namespace Matches.Data
 {
@@ -13,9 +14,11 @@ namespace Matches.Data
         private readonly ApplicationDbContext _context;
         public IScoreCardRepository ScoreCard { get; set; }
 
-        public UnitOfWork(ApplicationDbContext context){
+        public UnitOfWork(
+                        ApplicationDbContext context,
+                        InventoryService.inventoryClient inventoryClient){
             _context = context;
-            ScoreCard = new ScoreCardRepository(context);
+            ScoreCard = new ScoreCardRepository(context,inventoryClient);
         }
 
         public async Task CompleteAsync(){

@@ -10,6 +10,7 @@ namespace inventory.Models
         public int Id { get; set; }
         public string? Name { get; set; }
         public List<TeamMemberModel>? Members { get; set; }
+        public int CaptainId { get; set; }
         public int Count { get; set; }
 
         public static explicit operator TeamModel(teamInstance v)
@@ -18,7 +19,8 @@ namespace inventory.Models
                 Name = v.Name,
                 Id = (v.Id ==0)?0:v.Id,
                 Members = convertTeamMembersModel(v.Members),
-                Count =v.Members.Count
+                Count =v.Members.Count,
+                // CaptainId = v
             };
 
             return team;

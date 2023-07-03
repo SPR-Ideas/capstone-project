@@ -1,6 +1,7 @@
 using inventory.Core;
 using inventory.Core.Repository;
 using AutoMapper;
+using MatchService = Matches.Protos.Matches;
 namespace inventory.Data
 {
     public class UnitOfWork : IUnitOfWork , IDisposable
@@ -15,12 +16,12 @@ namespace inventory.Data
         private readonly ApplicationDbContext _context;
 
 
-        public UnitOfWork(ApplicationDbContext context,IMapper mapper){
+        public UnitOfWork(ApplicationDbContext context,IMapper mapper,MatchService.MatchesClient matchclient){
             _context = context;
             Users = new UserRepository(_context);
             Team = new TeamRepository(_context,mapper);
             LeaderBoard = new LeaderBoardRepository(_context,mapper);
-            Match = new MatchRepository(_context);
+            Match = new MatchRepository(_context,mapper,matchclient);
         }
 
         public async Task CompleteAsync()

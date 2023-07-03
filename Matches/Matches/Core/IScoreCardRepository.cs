@@ -7,5 +7,7 @@ namespace Matches.Core
         ScoreCard? createScoreCard(ScoreCardCreateRequest ScoreCard);
 
         Task<bool> updateScoreCard(EachBallRequest ScoreCard);
+        Task<ScoreCard> GetById(int Id);
+        Task<List<ScoreCard>> GetByIds(List<int> Ids);
     }
 }

@@ -5,7 +5,7 @@
 namespace Auth.Migrations
 {
     /// <inheritdoc />
-    public partial class CredentialMigrations : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace Auth.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsExternal = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -24,6 +24,12 @@ namespace Auth.Migrations
                 {
                     table.PrimaryKey("PK_cred", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cred_Username",
+                table: "cred",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />

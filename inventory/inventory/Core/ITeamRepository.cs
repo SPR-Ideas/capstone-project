@@ -13,6 +13,6 @@ namespace inventory.Core
 
         Task<List<teamInstanceWithUser>> ReturnTeamsWithPlayerInstance(List<TeamModel> teams);
         Task<List<UsersModels>?> GetUserRangeById(List<int> Ids);
-
+        Task<bool> Add(TeamModel team,int captain);
     }
 }
