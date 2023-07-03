@@ -9,4 +9,5 @@ package Matches;
 service Matches{
     rpc updateEachBall(EachBallRequest) returns (statusResponse);
     rpc CreateScoreCard(ScoreCardCreateRequest) returns (scoreCardResponse);
+
 }

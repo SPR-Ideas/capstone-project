@@ -5,7 +5,7 @@
 namespace Matches.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class ModifiedInningsScoreCard : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,10 @@ namespace Matches.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Wickets = table.Column<int>(type: "int", nullable: false),
                     Balls = table.Column<int>(type: "int", nullable: false),
-                    Sore = table.Column<int>(type: "int", nullable: false)
+                    Sore = table.Column<int>(type: "int", nullable: false),
+                    TotalOver = table.Column<int>(type: "int", nullable: false),
+                    TotalWicktes = table.Column<int>(type: "int", nullable: false),
+                    IsInningsCompleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

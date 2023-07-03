@@ -4,6 +4,8 @@ using inventory.Data;
 using inventory.Protos;
 using inventory.Models;
 using AuthService = Auth.Protos.authService;
+using MatchService = Matches.Protos.Matches;
+using MatchProto = Matches.Protos;
 using AuthProto = Auth.Protos;
 
 
@@ -17,11 +19,16 @@ namespace inventory.Services
         private  readonly UnitOfWork _unitOfWork;
         private  readonly IMapper _mapper;
         private  readonly AuthService.authServiceClient _authClient;
+        private  readonly MatchService.MatchesClient _matchService;
 
-        public InventoryService(ApplicationDbContext context,IMapper mapper,AuthService.authServiceClient authClient) {
+        public InventoryService(ApplicationDbContext context,IMapper mapper,
+                                AuthService.authServiceClient authClient,
+                                MatchService.MatchesClient matchService
+                                ) {
             _mapper = mapper;
             _unitOfWork = new UnitOfWork(context,mapper);
             _authClient = authClient;
+            _matchService = matchService;
         }
 
 
@@ -166,14 +173,25 @@ namespace inventory.Services
         public override async Task<statusResponse> createMatch(MatchInstance request, ServerCallContext context)
         {
             try{
+                MatchProto.teamInstanceWithUser val = _mapper.Map<MatchProto.teamInstanceWithUser>((await _unitOfWork.Team.ReturnTeamsWithPlayerInstance(new List<TeamModel>() { await _unitOfWork.Team.GetById(request.VisitorTeamId) }))[0]);
+                // Create a ScoreCard Instance via Grpc
+               var response = await _matchService.CreateScoreCardAsync(new MatchProto.ScoreCardCreateRequest{
+                   VisitorTeam = _mapper.Map<MatchProto.teamInstanceWithUser>((await _unitOfWork.Team.ReturnTeamsWithPlayerInstance(new List<TeamModel>() { await _unitOfWork.Team.GetById(request.VisitorTeamId) }))[0]),
+                            HostTeam = _mapper.Map<MatchProto.teamInstanceWithUser>((await _unitOfWork.Team.ReturnTeamsWithPlayerInstance(new List<TeamModel>() { await _unitOfWork.Team.GetById(request.HostTeamId)}))[0]),
+                            IsHostInnings = request.IsHostInnings,
+                            Overs = request.Overs,
+                            Wickets = request.Wickets
+                        });
 
-            //    {
-            //      Communication between MatchService should be implemented.
-            //    }
-                await _unitOfWork.Match.Add(_mapper.Map<MatchModels>(request));
+                var matchtInstance = _mapper.Map<MatchModels>(request);
+                matchtInstance.ScoreCardId = response.ScoreCardId; // updateing MatchInstance.
+
+                await _unitOfWork.Match.Add(matchtInstance);
                 await _unitOfWork.CompleteAsync();
                 return new statusResponse{Status = true};
-            }catch(Exception) {return new statusResponse{Status=false};}
+            }catch(Exception e) {
+                Console.WriteLine(e);
+                return new statusResponse{Status=false};}
         }
 
     }

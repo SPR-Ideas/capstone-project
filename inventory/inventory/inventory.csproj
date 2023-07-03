@@ -42,7 +42,10 @@
     <Protobuf Include="Protos\auth.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\inventory.proto" GrpcServices="Server" />
-    <Protobuf Include="Protos\messages.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\messages.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\Match.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\MatchMessages.proto" GrpcServices="Client" />
+
   </ItemGroup>
 
 </Project>

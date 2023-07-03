@@ -1,8 +1,10 @@
+using System.Text.RegularExpressions;
 using Grpc.Net.Client;
 using inventory.Data;
 using inventory.Services;
 using Microsoft.EntityFrameworkCore;
 using AuthProto = Auth.Protos.authService;
+using MatchProto = Matches.Protos.Matches;
 
 namespace inventory
 {
@@ -30,9 +32,13 @@ namespace inventory
 
             var AuthChannel = GrpcChannel.ForAddress(
                                     "http://localhost:5218");
+            var MatchChannel = GrpcChannel.ForAddress(
+                                    "http://localhost:5093");
             var client = new AuthProto.authServiceClient(AuthChannel);
+             var MatchClient = new MatchProto.MatchesClient(MatchChannel);
 
             builder.Services.AddSingleton(client);
+            builder.Services.AddSingleton(MatchClient);
 
             var app = builder.Build();
 

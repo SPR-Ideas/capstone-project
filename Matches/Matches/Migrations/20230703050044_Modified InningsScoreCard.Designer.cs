@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Matches.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230702072937_initial")]
-    partial class initial
+    [Migration("20230703050044_Modified InningsScoreCard")]
+    partial class ModifiedInningsScoreCard
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,7 +111,16 @@ namespace Matches.Migrations
                     b.Property<int>("Balls")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsInningsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Sore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalOver")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalWicktes")
                         .HasColumnType("int");
 
                     b.Property<int>("Wickets")

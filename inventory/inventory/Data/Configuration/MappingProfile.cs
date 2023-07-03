@@ -16,6 +16,13 @@ namespace inventory.Data.Configuration
             CreateMap<MatchInstance,MatchModels>();
             CreateMap<MatchModels , MatchInstance>();
             // Define mappings for other models as needed
+
+            //  CreateMap<Matches.Protos.teamInstanceWithUser,teamInstanceWithUser>();
+            CreateMap<teamInstanceWithUser,Matches.Protos.teamInstanceWithUser>();
+            // CreateMap<teamInstanceWithUser,Matches.Protos.teamInstanceWithUser>()
+            // .ForMember(dest => dest.Members, opt => opt.MapFrom(src => src.Members));
+            CreateMap<teamMemberWithUsers,Matches.Protos.teamMemberWithUsers>();
+            CreateMap<userInstance,Matches.Protos.userInstance>();
         }
 }
 

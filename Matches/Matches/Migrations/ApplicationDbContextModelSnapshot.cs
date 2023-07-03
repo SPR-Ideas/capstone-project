@@ -108,7 +108,16 @@ namespace Matches.Migrations
                     b.Property<int>("Balls")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsInningsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Sore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalOver")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalWicktes")
                         .HasColumnType("int");
 
                     b.Property<int>("Wickets")

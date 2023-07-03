@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Matches.Data;
 using Matches.Protos;
 using Grpc.Core;
+using Matches.Models;
 
 namespace Matches.Services
 {
@@ -26,6 +27,13 @@ namespace Matches.Services
                 return new statusResponse{Status = true};
             }catch(Exception ){return new statusResponse{Status = false};}
 
+        }
+
+        public override async Task<scoreCardResponse> CreateScoreCard(ScoreCardCreateRequest request, ServerCallContext context)
+        {
+            ScoreCard scoreCard = _unitOfwork.ScoreCard.createScoreCard(request);
+            await _unitOfwork.CompleteAsync();
+            return new scoreCardResponse{ScoreCardId = scoreCard!.Id};
         }
 
     }

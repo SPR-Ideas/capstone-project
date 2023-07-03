@@ -9,11 +9,11 @@ namespace Matches.Models
     {
         public int Id { get; set;}
         public int Wickets { get; set;}
-
         public int Balls { get; set;}
-
         public int Sore {get;set;}
-
+        public int TotalOver { get; set;}
+        public int TotalWicktes { get; set;}
+        public bool IsInningsCompleted { get; set;}
         public ICollection<BattingInnings>? BattingStats { get; set;}
         public ICollection<BlowingInnings>? BlowingStats { get; set;}
 

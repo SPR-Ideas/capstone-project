@@ -12,8 +12,8 @@ using inventory.Data;
 namespace inventory.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230630091426_New Approach for leaderboard")]
-    partial class NewApproachforleaderboard
+    [Migration("20230703050451_Cleared Matches")]
+    partial class ClearedMatches
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,43 @@ namespace inventory.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("inventory.Models.MatchModels", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("HostTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Overs")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScoreCardId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("VictoryTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VistiorTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wickets")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Matches");
+                });
 
             modelBuilder.Entity("inventory.Models.TeamMemberModel", b =>
                 {

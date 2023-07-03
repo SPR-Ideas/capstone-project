@@ -33,8 +33,8 @@ message teamInstanceWithUser{
 
 message ScoreCardCreateRequest{
     int32 overs =1;
-    bool IsHostInnings =2;
     int32 Wickets=5;
+    bool IsHostInnings =2;
     teamInstanceWithUser HostTeam =3;
     teamInstanceWithUser VisitorTeam=4;
 }
@@ -45,7 +45,7 @@ message EachBallRequest{
     string Options =3;
     int32 BatsmanId = 4;
     int32 BlowerId = 5;
-    string BlowerName = 6;
+    int32 BlowerName = 6;
 }
 
 message statusResponse{

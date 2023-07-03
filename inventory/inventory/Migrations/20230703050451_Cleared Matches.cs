@@ -1,15 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace inventory.Migrations
 {
     /// <inheritdoc />
-    public partial class NewApproachforleaderboard : Migration
+    public partial class ClearedMatches : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Matches",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HostTeamId = table.Column<int>(type: "int", nullable: false),
+                    VistiorTeamId = table.Column<int>(type: "int", nullable: false),
+                    Overs = table.Column<int>(type: "int", nullable: false),
+                    Wickets = table.Column<int>(type: "int", nullable: false),
+                    VictoryTeamId = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    ScoreCardId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Matches", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Teams",
                 columns: table => new
@@ -82,6 +103,9 @@ namespace inventory.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Matches");
+
             migrationBuilder.DropTable(
                 name: "TeamMembers");
 

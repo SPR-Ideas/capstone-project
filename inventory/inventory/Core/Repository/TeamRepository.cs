@@ -100,5 +100,6 @@ namespace inventory.Core.Repository
             }
             return response;
         }
+
     }
 }

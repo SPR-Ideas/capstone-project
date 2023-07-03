@@ -28,7 +28,7 @@ namespace Matches.Core.Repository
                 _battingStat.DisplayName = member.User.Name;
                 _battingStat.UserId = member.User.Id;
 
-                _blowingStat.UserId = member.Id;
+                _blowingStat.UserId = member.User.Id;
                 _blowingStat.DisplayNames = member.User.Name;
 
                 _battingStats.Add(_battingStat);
@@ -42,7 +42,7 @@ namespace Matches.Core.Repository
         }
 
 
-        public bool createScoreCard(ScoreCardCreateRequest scoreCard)
+        public ScoreCard?  createScoreCard(ScoreCardCreateRequest scoreCard)
         {
             try{
                 ScoreCard _scoreCard = new ScoreCard();
@@ -51,22 +51,39 @@ namespace Matches.Core.Repository
                 _scoreCard.HostTeamInnings = createInningWithTeam(scoreCard.HostTeam);
                 _scoreCard.VistorTeamInnings = createInningWithTeam(scoreCard.VisitorTeam);
                 _context.ScoreCard!.Add(_scoreCard);
-                return true;
-            }catch (Exception){return false;}
+                return _scoreCard;
+            }catch (Exception){return null;}
 
         }
+
 
         public InningsScoreCard  UpdateInnings(InningsScoreCard innings,EachBallRequest request){
             List<string> options = new List<string>(){"WD","NB",};
             var batsmam =  innings.BattingStats!.FirstOrDefault(user=> user.UserId==request.BatsmanId);
             var blower =   innings.BlowingStats!.FirstOrDefault(user=> user.UserId==request.BlowerId);
 
+
+
+            if(options.Contains(request.Options)){
+
+                innings.Sore++;  // Penalty runs for wide and NoBall.
+                blower!.Runs++;
+            }
+
+            // Runs Scored by Batsment
             innings.Sore += request.Runs;
-            batsmam!.Runs +=request.Runs;
+            if(request.Options == ""||request.Options=="NB"){
+                batsmam!.Runs +=request.Runs;
+            }
+            blower!.Runs ++;
+            if(request.Runs==6){batsmam!.Sixer++;}
+            if(request.Runs==4){batsmam!.Four++;}
 
             if(!options.Contains(request.Options))
                 innings.Balls++;
                 blower!.BallsBlowed++;
+                batsmam!.Balls++;
+
             return innings;
 
         }
