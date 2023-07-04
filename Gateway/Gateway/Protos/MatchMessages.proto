@@ -1,9 +1,7 @@
 syntax = "proto3";
 
-option csharp_namespace = "inventory.Protos";
-
-package inventory;
-
+option csharp_namespace = "Matches.Protos";
+package Matches;
 message userInstance {
     int32 Id = 1;
     string UserName = 2;
@@ -19,41 +17,6 @@ message userInstance {
     int32 Matches = 12;
 }
 
-message userInstanceRequest{
-    int32 Id = 1;
-    string UserName = 2;
-    string Password = 8;
-    string Name =3;
-    int32 Age = 4;
-    string Role = 5;
-    string BattingStyle = 6;
-    string BlowingStyle = 7;
-}
-
-message teamMemberInstance{
-    int32 Id = 1;
-    int32 userId = 2;
-    bool IsCaptain = 3;
-    bool IsPlaying =4;
-}
-
-message teamInstance{
-    int32 Id = 1;
-    string Name = 2;
-    repeated teamMemberInstance Members =3;
-    int32 Count = 4;
-}
-
-message inventoryData{
-    userInstance user =1;
-    repeated teamInstanceWithUser teams = 2;
-    repeated MatchInstanceResponse matches =3;
-}
-
-message statusResponse {
-    bool status = 1;
-}
-
 message teamMemberWithUsers{
     int32 Id = 1;
     userInstance user = 2;
@@ -66,41 +29,31 @@ message teamInstanceWithUser{
     string Name = 2;
     repeated teamMemberWithUsers Members =3;
     int32 Count = 4;
-
-
 }
 
-message makeCaptainInstance{
-    int32 UserId=1;
-    int32 TeamId=2;
+message ScoreCardCreateRequest{
+    int32 overs =1;
+    int32 Wickets=5;
+    bool IsHostInnings =2;
+    teamInstanceWithUser HostTeam =3;
+    teamInstanceWithUser VisitorTeam=4;
 }
 
-message LeaderBoardRequest{
-    int32 Page=1;
-    bool Mode = 2;
+message EachBallRequest{
+    int32 ScoreCardID = 1;
+    int32 Runs =2;
+    string Options =3;
+    int32 BatsmanId = 4;
+    int32 BlowerId = 5;
+    string BlowerName = 6;
 }
 
-message ListOfUser{
-    repeated userInstance users = 1;
+message statusResponse{
+    bool Status =1;
 }
 
-message MatchInstance{
-    int32 Id = 1;
-    int32 HostTeam_id = 2;
-    int32 VisitorTeam_id = 3;
-    int32 Overs = 4;
-    int32 Wickets = 5;
-    int32 VictoryTeam_id = 6;
-    int64 StartDate = 7;
-    bool IsCompleted = 8;
-    int32 ScoreCardId = 9;
-    bool IsHostInnings = 10;
-}
-
-message completMatachRequest {
+message scoreCardResponse{
     int32 scoreCardId = 1;
-    int32 VictoryTeamId =2;
-    string Result = 3;
 }
 
 
@@ -150,23 +103,4 @@ message BlowingInningsgrpc {
 }
 message listOfScoreCard{
     repeated scoreCardRequest scoreCard =1;
-}
-
-message MatchInstanceResponse{
-    int32 Id = 1;
-    int32 HostTeam_id = 2;
-    int32 VisitorTeam_id = 3;
-    int32 Overs = 4;
-    int32 Wickets = 5;
-    int32 VictoryTeam_id = 6;
-    int64 StartDate = 7;
-    bool IsCompleted = 8;
-    scoreCardRequest  ScoreCard = 9;
-    bool IsHostInnings = 10;
-    string Result = 11;
-}
-
-
-message emptyRequest{
-
 }

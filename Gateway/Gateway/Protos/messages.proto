@@ -42,6 +42,7 @@ message teamInstance{
     string Name = 2;
     repeated teamMemberInstance Members =3;
     int32 Count = 4;
+
 }
 
 message inventoryData{
@@ -168,5 +169,5 @@ message MatchInstanceResponse{
 
 
 message emptyRequest{
-
+    
 }

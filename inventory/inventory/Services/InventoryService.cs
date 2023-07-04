@@ -69,9 +69,6 @@ namespace inventory.Services
         public override async Task<inventoryData> getInventory(emptyRequest request, ServerCallContext context)
         {
             int UserId = Convert.ToInt32(context.GetHttpContext().User.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.Sid)!.Value);
-            // Console.WriteLine(context.AuthContext.FindPropertiesByName(ClaimTypes.Name).Value);
-            // var cu = ClaimsPrincipal.Current;
-            // Console.WriteLine(cu!.FindFirst(ClaimTypes.Sid));
             userInstance _user = _mapper.Map<userInstance>( await _unitOfWork.Users.GetById(UserId));
             var temp = await _unitOfWork.Users.GetUserTeams(UserId);
 
@@ -99,11 +96,11 @@ namespace inventory.Services
             }
         }
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public override async Task<teamInstance> createTeam(teamInstance request, ServerCallContext context)
         {
             try{
-                int captainId = 1;
+                int captainId = Convert.ToInt32(context.GetHttpContext().User.Claims.FirstOrDefault(c=>c.Type == ClaimTypes.Sid)!.Value) ;
                 TeamModel _team  = (TeamModel)request;
                 _team.Id = request.Id;
 

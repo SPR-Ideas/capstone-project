@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option csharp_namespace = "Matches.Protos";
+
+import "Protos/MatchMessages.proto";
+
+package Matches;
+
+service Matches{
+    rpc updateEachBall(EachBallRequest) returns (statusResponse);
+    rpc CreateScoreCard(ScoreCardCreateRequest) returns (scoreCardResponse);
+    rpc getScoreCardById(scoreCardRequest)returns (scoreCardRequest);
+    rpc getScoreCardsByIds(listOfScoreCard)returns(listOfScoreCard);
+}

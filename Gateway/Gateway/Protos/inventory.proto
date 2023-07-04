@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "inventory.Protos";
+
+package inventory;
+
+
+import "Protos/messages.proto";
+service inventory{
+    rpc getInventory(emptyRequest) returns (inventoryData);
+
+    //User Services
+    rpc createUser(userInstance) returns (statusResponse);
+    rpc updateUser (userInstance) returns (statusResponse);
+
+    // Team Services
+    rpc createTeam(teamInstance) returns (teamInstance);
+    rpc updateTeam(teamInstance) returns (statusResponse);
+    rpc makeCaptain(makeCaptainInstance) returns (statusResponse);
+
+    // leaderboard Services.
+    rpc updateUserPerformances(ListOfUser) returns (statusResponse);
+    rpc getLeaderBoard(LeaderBoardRequest) returns (ListOfUser);
+
+    // Match Services
+    rpc  createMatch(MatchInstance) returns (statusResponse);
+    rpc  completeMatch(completMatachRequest) returns (statusResponse);
+}
+
