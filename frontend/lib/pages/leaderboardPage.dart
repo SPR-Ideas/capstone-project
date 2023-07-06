@@ -30,6 +30,9 @@ class SearchController extends GetxController {
 
     }
     }
+  void changeMode(value){
+    mode.value  = value;
+  }
 
   void clearSearchQuery() {
     searchQuery.value = '';
@@ -64,12 +67,23 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
             ),
-            SizedBox(height: 20,),
-
-            Text("LeaderBoard",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-            SizedBox(height: 10),
-            Divider(thickness: 1,color: Colors.grey.shade200,),
-            SizedBox(height: 10),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                    const Icon(Icons.sports_basketball_sharp),
+                    Obx(() => Switch(
+                    value: searchController.mode.value,
+                    onChanged: (value) {
+                        searchController.changeMode(value);
+                        searchController.updateSearchQuery();
+                    },
+                ),),
+                const Icon(Icons.sports_cricket),
+                const SizedBox(width: 30,)
+                ],
+            ),
+            const Text("LeaderBoard",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w500),),
+            const SizedBox(height: 30,),
 
             Expanded(child:Container(
                 child: Obx(()=> ListView.builder(
