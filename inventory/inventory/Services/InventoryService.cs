@@ -42,6 +42,9 @@ namespace inventory.Services
                 UsersModels _user  = (UsersModels)request;
                 _user.Id = request.Id;
 
+                if(!request.IsExternal)
+                    _user.DisplayImage = "https://th.bing.com/th/id/OIP.PlUghRkXvx9eqZvManVhsgHaIS?w=170&h=190&c=7&r=0&o=5&dpr=1.9&pid=1.7";
+
                 // Communicating with auth Authorization Server
                 var response = await _authClient.addCredentialsAsync(
                     new AuthProto.userCredentials{
@@ -53,6 +56,7 @@ namespace inventory.Services
 
                 // Based on the status we gonna add the user model.
                 if(response.Status){
+                    _user.Id = response.Id;
                     // await _unitOfWork.LeaderBoard.Add((LeaderboardModel)request);
                     await _unitOfWork.Users.Add(_user);
                     await _unitOfWork.CompleteAsync();
@@ -158,10 +162,14 @@ namespace inventory.Services
         public override async Task<ListOfUser> getLeaderBoard(LeaderBoardRequest request, ServerCallContext context)
         {
             ListOfUser response = new ListOfUser();
+            if(request.SearchString!=""){
+                response.Users.Add(await _unitOfWork.Users.SearchByNameOrUserName(request.SearchString));
+                return response;
+            }
             response.Users.Add(
                 request.Mode? // If Mode is ture returns leaderboard based on user with higesh runs.
-                await _unitOfWork.LeaderBoard.GetLeaderboard(request.Page):
-                await _unitOfWork.LeaderBoard.GetLeaderboardWithWicktes(request.Page));
+                await _unitOfWork.LeaderBoard.GetLeaderboard((request.Page==0)?1:request.Page):
+                await _unitOfWork.LeaderBoard.GetLeaderboardWithWicktes((request.Page==0)?1:request.Page));
             return response;
         }
 

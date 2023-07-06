@@ -7,6 +7,6 @@ namespace Auth.Core
     {
         Task<CredentialsModel?> GetByUsername(string username);
         Task<CredentialsModel?> CheckCredentials(userCredentials user);
-        bool Add(CredentialsModel entity);
+        CredentialsModel Add(CredentialsModel entity);
     }
 }

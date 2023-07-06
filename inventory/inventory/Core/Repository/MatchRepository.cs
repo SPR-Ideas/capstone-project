@@ -39,7 +39,7 @@ namespace inventory.Core.Repository
 
         public async Task<List<int>> GetUserMatchHistory(int userId){
 
-            var _userRepo = new UserRepository(_context);
+            var _userRepo = new UserRepository(_context,_mapper);
             ICollection<TeamModel>? _teams = await _userRepo.GetUserTeams(userId); // give user Team list
             List<int> team_ids = _teams!.Select(team=>team.Id).ToList();
 

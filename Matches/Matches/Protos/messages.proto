@@ -17,6 +17,7 @@ message userInstance {
     int32 Runs = 10;
     int32 Wickets = 11;
     int32 Matches = 12;
+    string DisplayImage =13;
 }
 
 message userInstanceRequest{

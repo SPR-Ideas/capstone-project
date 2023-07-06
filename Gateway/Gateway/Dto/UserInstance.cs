@@ -13,12 +13,13 @@ namespace Gateway.Dto
         public string? Name {get; set; }
         public int Age {get; set; }
         public string? Role {get; set; }
-        public string? BattingStyle {get; set; }
-        public string? BlowingStyle {get; set; }
+        public string? BattingStyles {get; set; }
+        public string? BlowingStyles {get; set; }
         public bool IsExternal {get; set; }
         public int Runs { get; set; }
         public int Wickets { get; set;}
         public int Matches { get; set; }
+        public string? DisplayImage {get;set;}
 
     }
 }

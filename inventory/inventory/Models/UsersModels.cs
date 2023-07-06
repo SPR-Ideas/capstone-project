@@ -14,6 +14,7 @@ namespace inventory.Models
         public string? Name { get; set; }
         public string? UserName { get; set; }
         public int Age  { get;set; }
+        public string? DisplayImage {get;set;}
         public string? Role { get; set; }
         public string? BattingStyles { get; set; }
         public string? BlowingStyles {get;set;}
@@ -35,6 +36,7 @@ namespace inventory.Models
             user.Wickets = v.Wickets;
             user.Runs = v.Runs;
             user.Matches = v.Matches;
+            user.DisplayImage = v.DisplayImage;
 
             return user;
         }

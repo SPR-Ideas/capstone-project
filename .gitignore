@@ -19,3 +19,33 @@ Gateway/.vs
 Gateway/Gateway/.vscode
 Gateway/Gateway/bin
 Gateway/Gateway/obj
+
+
+# Flutter/Dart
+**/build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub/
+.idea/
+.vscode/
+*.iml
+*.metadata
+
+# iOS
+Pods/
+*.xcworkspace/
+*.xccheckout
+*.xcuserstate
+ios/Podfile.lock
+
+# Android
+**/android/gradle.properties
+**/android/local.properties
+**/android/gradlew
+**/android/gradlew.bat
+**/android/.gradle/
+**/android/captures/
+
+# Miscellaneous
+.DS_S

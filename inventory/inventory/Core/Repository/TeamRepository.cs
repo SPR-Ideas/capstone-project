@@ -86,6 +86,7 @@ namespace inventory.Core.Repository
                 _team.Id = team.Id;
                 _team.Name = team.Name;
                 _team.Count = team.Count;
+                _team.CaptainId = team.CaptainId;
 
                 foreach (var members in team.Members!){
                     teamMemberWithUsers _member = new teamMemberWithUsers();

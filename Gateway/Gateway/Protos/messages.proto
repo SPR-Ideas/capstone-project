@@ -17,6 +17,7 @@ message userInstance {
     int32 Runs = 10;
     int32 Wickets = 11;
     int32 Matches = 12;
+    string DisplayImage =13;
 }
 
 message userInstanceRequest{
@@ -67,8 +68,7 @@ message teamInstanceWithUser{
     string Name = 2;
     repeated teamMemberWithUsers Members =3;
     int32 Count = 4;
-
-
+    int32 CaptainId= 5;
 }
 
 message makeCaptainInstance{
@@ -79,6 +79,7 @@ message makeCaptainInstance{
 message LeaderBoardRequest{
     int32 Page=1;
     bool Mode = 2;
+    string SearchString =3;
 }
 
 message ListOfUser{
@@ -169,5 +170,5 @@ message MatchInstanceResponse{
 
 
 message emptyRequest{
-    
+
 }

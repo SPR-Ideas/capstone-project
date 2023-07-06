@@ -42,11 +42,12 @@ namespace Gateway.Controllers
                         UserName = user.UserName,
                         Name = user.Name,
                         Age = user.Age,
-                        BattingStyles = user.BattingStyle,
-                        BlowingStyles = user.BlowingStyle,
+                        BattingStyles = user.BattingStyles,
+                        BlowingStyles = user.BlowingStyles,
                         IsExternal = user.IsExternal,
                         Password = user.Password,
                         Role = user.Role,
+                        DisplayImage = user.DisplayImage,
                     }
             );
             return Ok(result);

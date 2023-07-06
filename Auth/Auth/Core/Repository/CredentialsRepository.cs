@@ -34,14 +34,14 @@ namespace Auth.Core.Repository
         }
 
 
-        public bool Add(CredentialsModel entity){
+        public CredentialsModel? Add(CredentialsModel entity){
 
             // It Creates an new instance of the entity.
 
             entity.Password = (entity.Password==null)? null : CreateHashPassword(entity.Password);
             try{ _context.cred.Add(entity) ;}
-            catch { return false ;}
-            return true ;
+            catch { return null ;}
+            return entity;
         }
 
 

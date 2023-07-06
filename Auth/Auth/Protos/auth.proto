@@ -22,4 +22,5 @@ message tokenResponse {
 
 message statusResponse {
     bool status = 1;
+    int32 Id=2;
 }

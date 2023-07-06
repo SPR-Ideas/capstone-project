@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using inventory.Models;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace inventory.Data
 {
@@ -14,5 +15,19 @@ namespace inventory.Data
         public DbSet<TeamMemberModel>? TeamMembers { get; set; }
         public DbSet<MatchModels>? Matches { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UsersModels>()
+                .Property(e => e.Id)
+                .ValueGeneratedNever(); // Disable auto-increment
+
+            // modelBuilder.Entity<UsersModels>()
+            //     .Property(e => e.Id)
+            //     .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore); // Enable explicit value insertion
+
+            // Other configurations
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

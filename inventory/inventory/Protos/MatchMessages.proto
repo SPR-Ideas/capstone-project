@@ -15,6 +15,7 @@ message userInstance {
     int32 Runs = 10;
     int32 Wickets = 11;
     int32 Matches = 12;
+    string DisplayImage =13;
 }
 
 message teamMemberWithUsers{
@@ -29,6 +30,7 @@ message teamInstanceWithUser{
     string Name = 2;
     repeated teamMemberWithUsers Members =3;
     int32 Count = 4;
+    int32 CaptainId= 5;
 }
 
 message ScoreCardCreateRequest{

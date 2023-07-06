@@ -18,7 +18,7 @@ namespace inventory.Data
 
         public UnitOfWork(ApplicationDbContext context,IMapper mapper,MatchService.MatchesClient matchclient){
             _context = context;
-            Users = new UserRepository(_context);
+            Users = new UserRepository(_context,mapper);
             Team = new TeamRepository(_context,mapper);
             LeaderBoard = new LeaderBoardRepository(_context,mapper);
             Match = new MatchRepository(_context,mapper,matchclient);

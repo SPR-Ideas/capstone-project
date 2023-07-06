@@ -36,7 +36,7 @@ namespace Auth.Services
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claim,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddHours(20),
                 signingCredentials: cred
                 ); // Creating Jwt Token
 
@@ -48,7 +48,7 @@ namespace Auth.Services
         public override async Task<statusResponse> addCredentials(userCredentials request, ServerCallContext context)
         {
 
-            bool _status = _unitOfWork.Credentials.Add(new CredentialsModel{
+            CredentialsModel? entity = _unitOfWork.Credentials.Add(new CredentialsModel{
                 Username  = request.UserName,
                 Password = request.Password,
                 IsExternal = request.IsExternal,
@@ -57,7 +57,7 @@ namespace Auth.Services
             await _unitOfWork.CompleteAsync();
 
 
-            return new statusResponse{Status = _status};
+            return new statusResponse{Status = (entity!=null)?true:false , Id = entity.Id};
 
         }
 

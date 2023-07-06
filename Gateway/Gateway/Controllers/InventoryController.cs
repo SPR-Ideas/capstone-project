@@ -26,22 +26,24 @@ namespace Gateway.Controllers
             _inventoryClient = inventoryClient;
             _mapper = mapper;
         }
-        [HttpPatch("UpdateUser")]
+        [HttpPut("UpdateUser")]
         public async Task<IActionResult> updateUser(UserInstance user){
             var result = await _inventoryClient.updateUserAsync(
                 new inventoryProto.userInstance{
                         UserName = user.UserName,
                         Name = user.Name,
                         Age = user.Age,
-                        BattingStyles = user.BattingStyle,
-                        BlowingStyles = user.BlowingStyle,
+                        BattingStyles = user.BattingStyles,
+                        BlowingStyles = user.BlowingStyles,
                         IsExternal = user.IsExternal,
                         Password = user.Password,
                         Role = user.Role,
                         Id = user.Id,
                         Matches = user.Matches,
                         Runs = user.Runs,
-                        Wickets = user.Wickets
+                        Wickets = user.Wickets,
+                        DisplayImage = user.DisplayImage,
+
                 }
             );
             return Ok(result);
@@ -114,11 +116,12 @@ namespace Gateway.Controllers
         }
 
         [HttpGet("GetLeaderBoard")]
-        public async Task<IActionResult>getLeaderboard(bool mode , int page){
+        public async Task<IActionResult>getLeaderboard(bool mode=true , int page=1,string? searchString=""){
             var result = await _inventoryClient.getLeaderBoardAsync(
                 new inventoryProto.LeaderBoardRequest{
                     Mode = mode,
-                    Page = page
+                    Page = page,
+                    SearchString = searchString
                 }
             );
             return Ok(result);

@@ -114,10 +114,7 @@ namespace inventory.Migrations
             modelBuilder.Entity("inventory.Models.UsersModels", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
@@ -126,6 +123,9 @@ namespace inventory.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BlowingStyles")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayImage")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Matches")
