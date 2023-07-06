@@ -1,13 +1,18 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frontend/Services/rest.dart';
 import 'package:frontend/models/listofuserModels.dart';
+import 'package:frontend/pages/teameditpage.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../models/createorupdateTeamModel.dart';
+import '../models/inventoryModels.dart';
 import '../utils/constant.dart';
 
 
@@ -16,9 +21,7 @@ class SearchController extends GetxController {
   Rx<bool>mode = true.obs;
   TextEditingController serchEditor = new TextEditingController();
   Rx<ListOfUsers> users = ListOfUsers().obs;
-  SearchController(){
-    updateSearchQuery();
-  }
+
   void updateSearchQuery() async{
     print(serchEditor.text);
 
@@ -42,24 +45,21 @@ class SearchController extends GetxController {
 
 
 
-Widget leaderboardPage(){
-    return MyHomePage();
-}
-
-
-class MyHomePage extends StatelessWidget {
+class searchUserPage extends StatelessWidget {
   final SearchController searchController = Get.put<SearchController>(SearchController());
-
+  TeamMembersController memberController ;
+    searchUserPage({required this.memberController});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(backgroundColor: Colors.white10,elevation: 0,iconTheme: IconThemeData(color: Colors.grey.shade400),),
       body: Column(
         children: [
-            Padding(padding: EdgeInsets.fromLTRB(16,0,16,20),
+            Padding(padding: EdgeInsets.fromLTRB(16,0,16,0),
             child:  TextField(
               controller: searchController.serchEditor,
               decoration: InputDecoration(
-                labelText: 'Search',
+                labelText: 'Search users',
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search),
                   onPressed : searchController.updateSearchQuery,
@@ -67,29 +67,6 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
             ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-            Padding(padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-            child: const Text("LeaderBoard",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w500),),),
-
-
-            Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                    const Icon(Icons.sports_basketball_sharp),
-                    Obx(() => Switch(
-                    value: searchController.mode.value,
-                    onChanged: (value) {
-                        searchController.changeMode(value);
-                        searchController.updateSearchQuery();
-                    },
-                ),),
-                const Icon(Icons.sports_cricket),
-                const SizedBox(width: 30,)
-                ],
-            ),]),
-            const SizedBox(height: 30,),
 
             Expanded(child:Container(
                 child: Obx(()=> ListView.builder(
@@ -114,14 +91,18 @@ class MyHomePage extends StatelessWidget {
                                 SizedBox(height: 10)
                                 ],
                             ),
+                            onTap: () {
+                                memberController.addUser(User.fromJson(user.toJson()));
+                                Get.back();
+                            },
                         // Add more user information as needed
                         );
-
                     },
 
                     ))
                 ,)
-            )
+            ),
+            
         ],
       ),
     );

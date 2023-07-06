@@ -7,9 +7,9 @@ import '../widgets/Buttons.dart';
 import '../widgets/inputwidgets.dart';
 
 class updateUserpage extends StatelessWidget{
-    final User userModel;
+    final User? userModel;
     final updateController;
-    updateUserpage({Key?key,required this.userModel}) : updateController =  updateUserController(user: userModel );
+    updateUserpage({Key?key, this.userModel}) : updateController =  updateUserController(user: userModel );
 
 
     @override
@@ -35,12 +35,12 @@ class updateUserpage extends StatelessWidget{
 
                                 CircleAvatar(
                                         radius: 50, // adjust the radius as needed
-                                        backgroundImage: NetworkImage(userModel.displayImage), // or AssetImage for local assets
+                                        backgroundImage: NetworkImage(userModel!.displayImage), // or AssetImage for local assets
                                     ),
                                 const SizedBox(height: 10,),
 
                                 Text(
-                                    userModel.name ,
+                                    userModel!.name ,
                                     style: const TextStyle(
                                         fontFamily: "Helvetica",
                                         fontSize: 15,
@@ -50,7 +50,7 @@ class updateUserpage extends StatelessWidget{
                                 const SizedBox(height:10),
 
                                 Text(
-                                    userModel.userName,
+                                    userModel!.userName,
                                     style: TextStyle(color: Colors.grey.shade500),
                                 ),
                                 const SizedBox(height: 10,),

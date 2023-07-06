@@ -84,12 +84,12 @@ namespace Gateway.Controllers
 
         [HttpPut("UpdateTeam")]
         public async Task<IActionResult>UpatedTeam(TeamInstance team){
+
             var result = await _inventoryClient.updateTeamAsync(
                 _mapper.Map<inventoryProto.teamInstance>(team)
             );
             return Ok(result);
         }
-
 
         [HttpPut("MakeCaptain")]
         public async Task<IActionResult> makeTeamCaptain(makeCaptain obj){

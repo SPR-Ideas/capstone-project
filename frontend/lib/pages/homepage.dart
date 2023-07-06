@@ -24,11 +24,10 @@ class homePage extends StatelessWidget{
     final homecontroller = Get.put(HomeController());
     final displayImage = useState<String?>(null);
     // final HomeTabs tabs = Get.put(HomeTabs());
-    final MyTabController myTabController = Get.put(MyTabController());
-
+    late MyTabController myTabController = Get.put(MyTabController( model: homecontroller));
     useEffect(() {
       homecontroller.InventoryCall().then((_) => {
-        displayImage.value = homecontroller.inventorymodel!.user!.displayImage
+        displayImage.value = homecontroller.inventorymodel!.user!.displayImage,
       });
       return null;
     });
@@ -82,16 +81,19 @@ class homePage extends StatelessWidget{
 class MyTabController extends GetxController {
   RxInt selectedIndex = 1.obs;
    Rx<Widget>  currentTab = historyPage().obs ;
+    final HomeController? model;
+    MyTabController({this.model});
 
   void changeTabIndex(int index) {
     selectedIndex.value = index;
+
 
     switch (index) {
       case 0:
         currentTab.value = matchPage();
         break;
       case 1:
-        currentTab.value = teamsPage();
+        currentTab.value = teamsPage(model!.inventorymodel);
         break;
       case 2:
         currentTab.value = historyPage();

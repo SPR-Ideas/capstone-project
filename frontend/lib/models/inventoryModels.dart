@@ -1,12 +1,12 @@
 class Inventorymodel {
   Inventorymodel({
-    required this.user,
-    required this.teams,
-    required this.matches,
+    this.user,
+    this.teams,
+    this.matches,
   });
-  late  User user;
-  late  List<Teams> teams;
-  late  List<dynamic> matches;
+  late  User? user;
+  late  List<Teams>? teams;
+  late  List<dynamic>? matches;
 
   Inventorymodel.fromJson(Map<String, dynamic> json){
     user = User.fromJson(json['user']);
@@ -16,8 +16,8 @@ class Inventorymodel {
 
   Map<String, dynamic> toJson() {
     var _data = <String, dynamic>{};
-    _data['user'] = user.toJson();
-    _data['teams'] = teams.map((e)=>e.toJson()).toList();
+    _data['user'] = user!.toJson();
+    _data['teams'] = teams!.map((e)=>e.toJson()).toList();
     _data['matches'] = matches;
     return _data;
   }
