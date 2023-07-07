@@ -208,5 +208,13 @@ namespace inventory.Services
                 Console.WriteLine(e);
                 return new statusResponse{Status=false};}
         }
+        public override async Task<listofTeams> getTeams(searchStringRequest request, ServerCallContext context)
+        {
+            List<TeamModel>teams =await _unitOfWork.Team.searchTeamByTeamName(request.SearchString);
+            List<teamInstance> teamInstance = teams.Select(x=>_mapper.Map<teamInstance>(x)).ToList();
+            listofTeams response = new listofTeams();
+            response.TeamInstance.Add(teamInstance);
+            return response;
+        }
     }
 }

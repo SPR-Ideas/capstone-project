@@ -18,6 +18,7 @@ service inventory{
     rpc updateTeam(teamInstance) returns (statusResponse);
     rpc makeCaptain(makeCaptainInstance) returns (statusResponse);
 
+
     // leaderboard Services.
     rpc updateUserPerformances(ListOfUser) returns (statusResponse);
     rpc getLeaderBoard(LeaderBoardRequest) returns (ListOfUser);
@@ -25,5 +26,7 @@ service inventory{
     // Match Services
     rpc  createMatch(MatchInstance) returns (statusResponse);
     rpc  completeMatch(completMatachRequest) returns (statusResponse);
+
+    rpc getTeams(searchStringRequest) returns (listofTeams);
 }
 

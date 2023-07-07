@@ -104,14 +104,19 @@ namespace Gateway.Controllers
 
         [HttpPost("CreateMatch")]
         public async Task<IActionResult>createMatch(createMatch match){
+
+            inventoryProto.MatchInstance t = new inventoryProto.MatchInstance();
+                    t.HostTeamId = match.HostTeam_id;
+                    t.VisitorTeamId = match.VisitorTeam_id;
+                    t.Overs = match.Overs;
+                    t.Wickets = match.Wickets;
+                    t.IsHostInnings = match.IsHostInnings;
+
+
+
             var result = await _inventoryClient.createMatchAsync(
-                new inventoryProto.MatchInstance{
-                    HostTeamId = match.HostTeam_id,
-                    VictoryTeamId = match.VisitorTeam_id,
-                    Overs = match.Overs,
-                    Wickets = match.Wickets
-                }
-            );
+                t
+                            );
             return Ok(result);
         }
 
@@ -123,6 +128,14 @@ namespace Gateway.Controllers
                     Page = page,
                     SearchString = searchString
                 }
+            );
+            return Ok(result);
+        }
+
+        [HttpGet("GetTeams")]
+        public async Task<IActionResult> getTeamsBySearchString(string searchString){
+            var result = await _inventoryClient.getTeamsAsync(
+                new inventoryProto.searchStringRequest{SearchString = searchString}
             );
             return Ok(result);
         }

@@ -57,7 +57,7 @@ class TeamMembersController extends GetxController {
     final CRPTeam _team =CRPTeam(
         Id: team!.id,
         Name: teamName.text,
-        Count: team!.members.length,
+        Count: team!.count,
         members: MemberstoMemberClass(team!.members));
         List<int> ids = _team.members.map((e) => e.userId).toList();
 
@@ -119,7 +119,6 @@ class teamEditPage extends StatelessWidget{
               controller: membersController.teamName,
               decoration: InputDecoration(
                 labelText: 'TeamName',
-
               ),
             ),
             ),

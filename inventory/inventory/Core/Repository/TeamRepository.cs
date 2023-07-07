@@ -59,6 +59,8 @@ namespace inventory.Core.Repository
             try{
                 TeamModel? team = await GetById(Id);
                 team!.Members!.RemoveAll(m => !playerShouldBeRetained.Contains(m.Id));
+                // var playerstobeRemoved = _context.TeamMembers.Where(m => !playerShouldBeRetained.Contains(m.Id));
+                // _context.TeamMembers.RemoveRange(playerstobeRemoved);
             }catch(Exception) { return false; }
 
             return true;
@@ -103,5 +105,8 @@ namespace inventory.Core.Repository
             return response;
         }
 
+        public async Task<List<TeamModel>> searchTeamByTeamName(string SearchString){
+            return await _dbset.Include(a=>a.Members).Where(x=>x.Name.StartsWith(SearchString)).ToListAsync();
+        }
     }
 }

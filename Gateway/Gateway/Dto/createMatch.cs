@@ -12,6 +12,7 @@ namespace Gateway.Dto
         public int VisitorTeam_id  {get; set; }
         public int Overs  {get; set; }
         public int Wickets  {get; set; }
+        public bool IsHostInnings {get; set; }
 
     }
 }

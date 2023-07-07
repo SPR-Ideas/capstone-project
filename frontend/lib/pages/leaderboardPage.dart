@@ -70,8 +70,8 @@ class MyHomePage extends StatelessWidget {
             Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-            Padding(padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-            child: const Text("LeaderBoard",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w500),),),
+            const Padding(padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+            child: Text("LeaderBoard",style: TextStyle(fontSize: 25,fontWeight: FontWeight.w500),),),
 
 
             Row(

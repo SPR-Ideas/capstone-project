@@ -7,13 +7,19 @@ import '../utils/constant.dart';
 class CustomTextBox extends StatelessWidget {
   final String hintText;
   final IconData icon;
-  final Controller;
+  final TextEditingController? Controller;
+  final bool enable_;
+  final IconData? suffixIcon_;
+  final Function? suffixFun;
 
   const CustomTextBox({
     Key? key,
     required this.hintText,
     required this.icon,
-    this.Controller
+    this.Controller,
+    this.enable_ = true,
+    this.suffixIcon_,
+    this.suffixFun,
   }) : super(key: key);
 
   @override
@@ -27,17 +33,21 @@ class CustomTextBox extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(15.0),
-            child: Icon(icon,color: primaryColor),
+            child: Icon(icon, color: primaryColor),
           ),
           Expanded(
             child: TextField(
-                controller:Controller ,
-                decoration: InputDecoration(
+              controller: Controller,
+              decoration: InputDecoration(
                 hintText: hintText,
                 border: InputBorder.none,
+                enabled: enable_,
+                suffixIcon: IconButton(icon: Icon(suffixIcon_,color: primaryColor,),
+                onPressed: (){suffixFun!.call();},
+                )
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

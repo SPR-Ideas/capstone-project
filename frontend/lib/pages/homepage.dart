@@ -79,7 +79,7 @@ class homePage extends StatelessWidget{
 }
 
 class MyTabController extends GetxController {
-  RxInt selectedIndex = 1.obs;
+  RxInt selectedIndex = 0.obs;
    Rx<Widget>  currentTab = historyPage().obs ;
     final HomeController? model;
     MyTabController({this.model});

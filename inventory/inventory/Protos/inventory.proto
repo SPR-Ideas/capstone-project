@@ -25,5 +25,6 @@ service inventory{
     // Match Services
     rpc  createMatch(MatchInstance) returns (statusResponse);
     rpc  completeMatch(completMatachRequest) returns (statusResponse);
+    rpc getTeams(searchStringRequest) returns (listofTeams);
 }
 
