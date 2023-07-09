@@ -1,25 +1,17 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frontend/Services/rest.dart';
-import 'package:frontend/models/listofuserModels.dart';
-import 'package:frontend/pages/teameditpage.dart';
 import 'package:frontend/widgets/NamewithPhoto.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:get_storage/get_storage.dart';
 
-import '../models/createorupdateTeamModel.dart';
-import '../models/inventoryModels.dart';
 import '../models/teamsearcResponse.dart';
-import '../utils/constant.dart';
 import 'matchpage.dart';
 
 
-class SearchController extends GetxController {
+class SearchController_team extends GetxController {
   RxString searchQuery = ''.obs;
   Rx<bool>mode = true.obs;
   TextEditingController serchEditor = new TextEditingController();
@@ -49,7 +41,7 @@ class SearchController extends GetxController {
 
 
 class searchteamPage extends StatelessWidget {
-  final SearchController searchController = Get.put<SearchController>(SearchController());
+  final SearchController_team searchController = Get.put<SearchController_team>(SearchController_team());
   MatchControlller memberController ;
     searchteamPage({required this.memberController});
   @override

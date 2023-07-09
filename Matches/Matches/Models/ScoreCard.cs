@@ -15,7 +15,7 @@ namespace Matches.Models
         public string? VisitorTeamName {get;set;}
 
         public InningsScoreCard? HostTeamInnings { get; set; }
-        public InningsScoreCard? VistorTeamInnings { get; set; }
+        public InningsScoreCard? VisitorTeamInnings { get; set; }
         public bool IsHostInnings { get; set; }
     }
 }

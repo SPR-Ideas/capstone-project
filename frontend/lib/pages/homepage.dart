@@ -49,7 +49,7 @@ class homePage extends StatelessWidget{
           const SizedBox(width: 20,),
         ],
       ),
-      body: Obx(() => myTabController.currentTab.value),
+      body: Obx(() =>  myTabController.currentTab.value),
       bottomNavigationBar: Obx(() => BottomNavigationBar(
         currentIndex: myTabController.selectedIndex.value,
         onTap: myTabController.changeTabIndex,
@@ -80,7 +80,7 @@ class homePage extends StatelessWidget{
 
 class MyTabController extends GetxController {
   RxInt selectedIndex = 0.obs;
-   Rx<Widget>  currentTab = historyPage().obs ;
+   Rx<Widget>  currentTab = matchPage().obs ;
     final HomeController? model;
     MyTabController({this.model});
 
@@ -90,18 +90,18 @@ class MyTabController extends GetxController {
 
     switch (index) {
       case 0:
-        currentTab.value = matchPage();
+        currentTab.value =matchPage() ;
         break;
       case 1:
         currentTab.value = teamsPage(model!.inventorymodel);
         break;
       case 2:
-        currentTab.value = historyPage();
+        currentTab.value = historyPage(model!.inventorymodel);
         break;
       case 3:
         currentTab.value = leaderboardPage();
       default:
-        currentTab.value = matchPage();
+        currentTab.value = matchPage() ;
     }
   }
 }

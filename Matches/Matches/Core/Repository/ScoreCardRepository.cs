@@ -23,26 +23,26 @@ namespace Matches.Core.Repository
                 .ThenInclude(x => x!.BattingStats)
             .Include(x => x.HostTeamInnings)
                 .ThenInclude(x => x!.BlowingStats)
-            .Include(x => x.VistorTeamInnings)
+            .Include(x => x.VisitorTeamInnings)
                 .ThenInclude(x => x!.BattingStats)
-            .Include(x => x.VistorTeamInnings)
+            .Include(x => x.VisitorTeamInnings)
                 .ThenInclude(x => x!.BlowingStats)
             .FirstAsync(x => x.Id == Id);
 
         }
 
         public async Task<List<ScoreCard>> GetByIds(List<int> Ids){
-            return await _context.ScoreCard!
+            var t =  await _context.ScoreCard!
             .Include(x => x.HostTeamInnings)
                 .ThenInclude(x => x!.BattingStats)
             .Include(x => x.HostTeamInnings)
                 .ThenInclude(x => x!.BlowingStats)
-            .Include(x => x.VistorTeamInnings)
+            .Include(x => x.VisitorTeamInnings)
                 .ThenInclude(x => x!.BattingStats)
-            .Include(x => x.VistorTeamInnings)
+            .Include(x => x.VisitorTeamInnings)
                 .ThenInclude(x => x!.BlowingStats)
             .Where(x=>Ids.Contains(x.Id)).ToListAsync();
-
+            return t;
         }
 
         public InningsScoreCard createInningWithTeam(teamInstanceWithUser team,int wickets,int overs)
@@ -90,7 +90,7 @@ namespace Matches.Core.Repository
                                                             scoreCard.HostTeam,
                                                             scoreCard.Wickets,
                                                             scoreCard.Overs);
-                _scoreCard.VistorTeamInnings = createInningWithTeam(
+                _scoreCard.VisitorTeamInnings = createInningWithTeam(
                                                             scoreCard.VisitorTeam,
                                                             scoreCard.Wickets,
                                                             scoreCard.Overs);
@@ -149,12 +149,12 @@ namespace Matches.Core.Repository
         public  ScoreCard MatchEngine(ScoreCard _scoreCard,EachBallRequest request){
 
             if(_scoreCard.IsHostInnings){
-                _scoreCard.HostTeamInnings = UpdateInnings(_scoreCard.HostTeamInnings!,_scoreCard.VistorTeamInnings!,request);
+                _scoreCard.HostTeamInnings = UpdateInnings(_scoreCard.HostTeamInnings!,_scoreCard.VisitorTeamInnings!,request);
                 if(_scoreCard.HostTeamInnings.IsInningsCompleted){
                      _scoreCard.IsHostInnings=!_scoreCard.IsHostInnings;}
             }else{
-                _scoreCard.VistorTeamInnings = UpdateInnings(_scoreCard.VistorTeamInnings!,_scoreCard.HostTeamInnings!,request);
-                if(_scoreCard.VistorTeamInnings!.IsInningsCompleted){
+                _scoreCard.VisitorTeamInnings = UpdateInnings(_scoreCard.VisitorTeamInnings!,_scoreCard.HostTeamInnings!,request);
+                if(_scoreCard.VisitorTeamInnings!.IsInningsCompleted){
                      _scoreCard.IsHostInnings=!_scoreCard.IsHostInnings;}
             }
             return _scoreCard;
@@ -167,7 +167,7 @@ namespace Matches.Core.Repository
                 _scoreCard = MatchEngine(_scoreCard,request);
 
                 if( _scoreCard.HostTeamInnings!.IsInningsCompleted &&
-                    _scoreCard.VistorTeamInnings!.IsInningsCompleted)
+                    _scoreCard.VisitorTeamInnings!.IsInningsCompleted)
                 {
                     //Sending A singal to Inventory Microservice -> Match Completed.
                    var response =  await _inventoryService.completeMatchAsync(concludeMatch(_scoreCard));
@@ -183,7 +183,7 @@ namespace Matches.Core.Repository
 
         public inventory.Protos.completMatachRequest concludeMatch(ScoreCard scoreCard){
             string result = "";
-            int? VTeamId = (scoreCard.HostTeamInnings!.Sore > scoreCard.VistorTeamInnings!.Sore)?
+            int? VTeamId = (scoreCard.HostTeamInnings!.Sore > scoreCard.VisitorTeamInnings!.Sore)?
                                         scoreCard.HostTeamId: scoreCard.VistorTeamId;
 
             int VictoryTeamId = (VTeamId == null)?0:(int) VTeamId;
@@ -196,19 +196,19 @@ namespace Matches.Core.Repository
                 }
                 else {
                     result = scoreCard.HostTeamName
-                            + " Won By " + (scoreCard.HostTeamInnings.Sore - scoreCard.VistorTeamInnings.Sore)
+                            + " Won By " + (scoreCard.HostTeamInnings.Sore - scoreCard.VisitorTeamInnings.Sore)
                             + " Runs.";
                 }
             }
             else{
                 if(!scoreCard.IsHostInnings ){
                     result = scoreCard.VisitorTeamName
-                         + " Won By " +(scoreCard.VistorTeamInnings.TotalWicktes - scoreCard.VistorTeamInnings.Wickets)
+                         + " Won By " +(scoreCard.VisitorTeamInnings.TotalWicktes - scoreCard.VisitorTeamInnings.Wickets)
                          + " Wickets ";
                 }
                 else {
                     result = scoreCard.HostTeamName
-                            + " Won By " + (scoreCard.VistorTeamInnings.Sore - scoreCard.HostTeamInnings.Sore)
+                            + " Won By " + (scoreCard.VisitorTeamInnings.Sore - scoreCard.HostTeamInnings.Sore)
                             + " Runs.";
                 }
             }
@@ -229,13 +229,13 @@ namespace Matches.Core.Repository
                     Runs = _user.Runs,
                 });
             }
-            foreach(var _user in _scorecard.VistorTeamInnings!.BattingStats!){
+            foreach(var _user in _scorecard.VisitorTeamInnings!.BattingStats!){
                 userMap.Add(_user.UserId , new inventory.Protos.userInstance{
                     Id = _user.UserId,
                     Runs = _user.Runs,
                 });
             }
-            foreach(var _user in _scorecard.VistorTeamInnings!.BlowingStats!){
+            foreach(var _user in _scorecard.VisitorTeamInnings!.BlowingStats!){
                 inventory.Protos.userInstance? u =  userMap.GetValueOrDefault(_user.UserId);
                 u!.Wickets = _user.Wickets;
             }

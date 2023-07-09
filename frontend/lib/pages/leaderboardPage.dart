@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Services/rest.dart';
 import 'package:frontend/models/listofuserModels.dart';
+import 'package:frontend/widgets/NamewithPhoto.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
@@ -97,10 +98,21 @@ class MyHomePage extends StatelessWidget {
                         searchController.users.value.users!.length,
                     itemBuilder: (context, index) {
                         final user = searchController.users.value.users![index];
+                        Rx<bool> imgResult = true.obs;
+
                         return ListTile(
-                        leading: CircleAvatar(
-                            backgroundImage: NetworkImage(user.DisplayImage),
-                        ),
+                        leading:Obx(() {
+                                if (imgResult.value) {
+                                return CircleAvatar(
+                                    backgroundImage: NetworkImage(user.DisplayImage),
+                                    onBackgroundImageError: (exception, stackTrace) {
+                                    imgResult.value = false;
+                                    },
+                                );
+                                } else {
+                                return NameWithPhoto(name: user.Name,size: 40,);
+                                }
+                            }),
                         title: Text(user.Name),
                         subtitle: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,

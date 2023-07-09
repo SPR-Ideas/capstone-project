@@ -199,7 +199,8 @@ namespace inventory.Services
                         });
 
                 var matchtInstance = _mapper.Map<MatchModels>(request);
-                matchtInstance.ScoreCardId = response.ScoreCardId; // updateing MatchInstance.
+                matchtInstance.ScoreCardId = response.ScoreCardId;
+                matchtInstance.VistiorTeamId = request.VisitorTeamId; // updateing MatchInstance.
 
                 await _unitOfWork.Match.Add(matchtInstance);
                 await _unitOfWork.CompleteAsync();

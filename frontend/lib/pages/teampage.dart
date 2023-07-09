@@ -16,7 +16,8 @@ Widget teamsPage(Inventorymodel? inventory){
 }
 
 class teampageController extends GetxController{
-    Rx<Inventorymodel> inventorymodel = Inventorymodel().obs;
+    Rx<Inventorymodel> inventorymodel = Inventorymodel(
+                        matches: <Matches>[],teams: <Teams>[],).obs;
 
 
 }

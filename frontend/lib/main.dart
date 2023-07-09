@@ -3,6 +3,7 @@ import 'package:frontend/pages/googlesingup.dart';
 import 'package:frontend/pages/homepage.dart';
 import 'package:frontend/pages/login.dart';
 import 'package:frontend/utils/constant.dart';
+import 'package:frontend/widgets/scorecardwidget.dart';
 import 'package:get/get.dart';
 import "package:get_storage/get_storage.dart";
 
@@ -20,7 +21,10 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      home: homePage()
+      home: Scaffold(
+        body: homePage()
+        
+      )
     );
   }
 }
