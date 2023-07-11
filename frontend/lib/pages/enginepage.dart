@@ -31,14 +31,17 @@ List<HostTeamInnings> GetCurrentInnings(ScoreCard scoreCard){
     return [HostTeamInnings(),];
 }
 
+
 bool isFreshInnings(HostTeamInnings innings) {
     return innings.battingStats!.every((battingStat) => battingStat.isCurrent == 0);
 }
 
+
 Future<List<int>> GetCurrentPlayers(
             Rx<HostTeamInnings> innings,Rx<BattingStats> striker ,
             Rx<BattingStats> nonStriker,Rx<BlowingStats> blower,
-            RxInt state,Rx<HostTeamInnings> otherInnings
+            RxInt state,Rx<HostTeamInnings> otherInnings,RxInt
+            strikerID
             )async
     {
     if(isFreshInnings(innings.value)){
@@ -56,6 +59,7 @@ Future<List<int>> GetCurrentPlayers(
             "nonStrikerId":nonStriker.value.id,
             "blowerId": blower.value.id,
         });
+        strikerID.value = striker.value.id;
         // state.value += state.value;
         // GetCurrentPlayers(innings, striker, nonStriker, blower,state,otherInnings);
 
@@ -63,9 +67,9 @@ Future<List<int>> GetCurrentPlayers(
     else{
         List<BattingStats> batsmen = innings.value.battingStats!.where((e)=>e.isCurrent==1).toList();
         striker.value =  BattingStats();
-        striker.value = batsmen.first;
+        striker.value = (strikerID.value==0)?batsmen.first:batsmen.firstWhere((e)=>e.id==strikerID.value);
         nonStriker.value = BattingStats();
-        nonStriker.value = batsmen.last;
+        nonStriker.value = (strikerID.value==0)?batsmen.last:batsmen.firstWhere((e)=>e.id!=strikerID.value);
         blower.value = otherInnings.value.blowingStats!.firstWhere((e)=>e.isCurrent==1);
     }
     return <int>[];
@@ -73,6 +77,7 @@ Future<List<int>> GetCurrentPlayers(
 
 class CricketController extends GetxController {
     RxInt stateChange = 0.obs;
+    RxInt StrikerId = 0.obs;
 
     late Rx<ScoreCard> scorecard  =ScoreCard().obs;
     late Rx<HostTeamInnings> currentInnings = HostTeamInnings().obs;
@@ -82,13 +87,18 @@ class CricketController extends GetxController {
     late Rx<BattingStats> nonStriker = BattingStats().obs;
     late Rx<BlowingStats> blower = BlowingStats().obs;
 
+    void swapBatsmen(){
+        StrikerId.value = nonStriker.value.id;
+        GetCurrentPlayers(currentInnings,striker,nonStriker,blower,stateChange,otherInnings,StrikerId);
+    }
+
     void updateScoreCard( ScoreCard scoreCard){
         scorecard.value = scoreCard;
         var list =  GetCurrentInnings(scoreCard);
         currentInnings.value = list[0];
         otherInnings.value = list[1];
 
-        GetCurrentPlayers(currentInnings,striker,nonStriker,blower,stateChange,otherInnings);
+        GetCurrentPlayers(currentInnings,striker,nonStriker,blower,stateChange,otherInnings,StrikerId);
         }
   // RxInt inningsScore = 0.obs;
   // RxInt wickets = 0.obs;
@@ -108,13 +118,34 @@ class CricketController extends GetxController {
   }
 
     void addRuns(int runs)async{
+        var options = getOptions();
+
+        if(options=="WK"){
+            Rx<BattingStats> current = BattingStats().obs;
+            Rx<BattingStats> newBt_ = BattingStats().obs;
+            await Get.dialog(fallofWicket(
+                currentBatsmenList: currentInnings.value.battingStats!.where((e)=>e.isCurrent==1).toList(),
+                newBatsmenList: currentInnings.value.battingStats!.where((e)=>e.isCurrent==0).toList(),
+                currentBt_: current,
+                newBt_: newBt_,
+                ));
+                StrikerId.value = newBt_.value.id;
+
+        var response = await makePutRequest("/ScoreCard/changeBatsman", {
+                "inningsId":currentInnings.value.id,
+                "currentBatsmen": current.value.id,
+                "newBatsmen": newBt_.value.id
+                });
+
+            print(response!.data);
+        }
         var response = await makePutRequest("/ScoreCard/UpdateEachBall",{
             "scoreCardID":scorecard.value.id,
             "runs": runs,
             "batsmanId": striker.value.userId,
             "blowerId" : blower.value.userId,
             "blowerName": blower.value.displayNames,
-            "options":getOptions()
+            "options": options
         });
         if(response!.data["status"]==true){
             makeServercall(this);
@@ -164,7 +195,7 @@ class CricketCounterPage extends HookWidget {
 
         return Scaffold(
         appBar:  AppBar(
-            title: const Text("Gully Cricket"),
+            title: Obx (() => Text("${cricketController.scorecard.value.hostTeamName} Vs ${cricketController.scorecard.value.visitorTeamName}")),
             centerTitle: true,
             backgroundColor: primaryColor,
 
@@ -430,13 +461,26 @@ class CricketCounterPage extends HookWidget {
                         ],
                         ),
                         Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
+                                Row(children: [
                                     Obx(() => Checkbox(
-                            value: cricketController.isWicket.value,
-                            onChanged: cricketController.toggleWicket,
-                            )),
-                            Text('Wicket'),
-                                ],
+                                value: cricketController.isWicket.value,
+                                onChanged: cricketController.toggleWicket,
+                                )),
+                                Text('Wicket'),
+                                ]),
+
+
+                             Obx(() {
+                                bool flag = cricketController.currentInnings.value.isInningsCompleted && cricketController.otherInnings.value.isInningsCompleted;
+                                return ElevatedButton(
+
+                             style: ButtonStyle(backgroundColor: (flag)?MaterialStatePropertyAll(Colors.grey.shade400):MaterialStatePropertyAll(primaryColor)),
+                             onPressed: (flag)?null: cricketController.swapBatsmen,
+                             child: Text("Swap Batsmen"),);})
+                            ],
+
                             )
                     ],
                     ),

@@ -21,7 +21,11 @@ namespace Matches.Core.Repository
         public async Task<bool> changeBatsMen(changeBatsmenReq request)
         {
             try{
-                InningsScoreCard? scoreCard = await  _context.InningsScoreCards!.FindAsync(request.InningsId);
+                // InningsScoreCard? scoreCard = await  _context.InningsScoreCards!.FindAsync(request.InningsId);
+                InningsScoreCard? scoreCard = await
+                        _context.InningsScoreCards!.Include(a=>a.BattingStats)
+                        .Include(a=>a.BlowingStats)
+                        .FirstAsync(x=>x.Id==request.InningsId);
                 scoreCard!.BattingStats!.First(x=>x.Id==request.CurrentBatsmen)!.IsCurrent= -1;
                 scoreCard!.BattingStats!.First(x=>x.Id==request.NewBatsmen)!.IsCurrent= 1;
                 return true;
@@ -33,7 +37,11 @@ namespace Matches.Core.Repository
         public async  Task<bool> changeblower(changeBlowerReq request)
         {
             try{
-                InningsScoreCard? scoreCard = await  _context.InningsScoreCards!.FindAsync(request.InningsId);
+                // InningsScoreCard? scoreCard = await  _context.InningsScoreCards!.FindAsync(request.InningsId);
+                InningsScoreCard? scoreCard = await
+                        _context.InningsScoreCards!.Include(a=>a.BattingStats)
+                        .Include(a=>a.BlowingStats)
+                        .FirstAsync(x=>x.Id==request.InningsId);
                 scoreCard!.BlowingStats!.First(x=>x.Id==request.CurrentBlowerId)!.IsCurrent= 0;
                 scoreCard!.BlowingStats!.First(x=>x.Id==request.NewBlowerId)!.IsCurrent= 1;
                 return true;

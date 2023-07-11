@@ -1,40 +1,103 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/inventoryModels.dart';
 import 'package:get/get.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:get_storage/get_storage.dart';
 
-import '../models/inventoryModels.dart';
+class fallofWicket extends StatelessWidget {
+  final List<BattingStats> currentBatsmenList;
+  final List<BattingStats> newBatsmenList;
 
-class MemberSelectionDialog extends GetWidget {
-      final List<String> usernameSuggestions;
 
-  MemberSelectionDialog({required this.usernameSuggestions});
+  final Rx<BattingStats> currentBt_;
+  final Rx<BattingStats> newBt_;
 
-  final TextEditingController _textEditingController = TextEditingController();
+
+  late final List<String> currentlist;
+  late final List<String> newlist;
+  final RxString striker = RxString('');
+  final RxString nonStriker = RxString('');
+  final RxString bowler = RxString('');
+
+  fallofWicket({
+    required this.currentBatsmenList,
+    required this.newBatsmenList,
+    required this.currentBt_,
+    required this.newBt_,
+  }) {
+    currentlist = currentBatsmenList.map((e) => e.displayName).toList();
+    newlist = newBatsmenList.map((e) => e.displayName).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController currentBtController = new TextEditingController();
+    TextEditingController newBtController = new TextEditingController();
+
     return AlertDialog(
-      title: Text('Enter Username'),
-      content: TypeAheadField<String>(
-        textFieldConfiguration: TextFieldConfiguration(
-          controller: _textEditingController,
-          decoration: InputDecoration(
-            hintText: 'Username',
+      title: Text('Select Players'),
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+
+          TypeAheadField<String>(
+            textFieldConfiguration: TextFieldConfiguration(
+              onChanged: (value) {
+                striker.value = value;
+              },
+              controller: currentBtController,
+              decoration: InputDecoration(
+                hintText: 'currentBatsmen',
+              ),
+            ),
+            suggestionsCallback: (pattern) {
+              return currentlist.where((player) {
+                return player.toLowerCase().contains(pattern.toLowerCase());
+              }).toList();
+            },
+            itemBuilder: (context, suggestion) {
+              return ListTile(
+                title: Text(suggestion),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+                currentBtController.text = suggestion;
+              striker.value = suggestion;
+            },
           ),
-        ),
-        suggestionsCallback: (pattern) {
-          return usernameSuggestions.where((username) {
-            return username.toLowerCase().contains(pattern.toLowerCase());
-          }).toList();
-        },
-        itemBuilder: (context, suggestion) {
-          return ListTile(
-            title: Text(suggestion),
-          );
-        },
-        onSuggestionSelected: (suggestion) {
-          _textEditingController.text = suggestion;
-        },
+
+          SizedBox(height: 16),
+
+          TypeAheadField<String>(
+            textFieldConfiguration: TextFieldConfiguration(
+              onChanged: (value) {
+                nonStriker.value = value;
+              },
+              controller: newBtController,
+              decoration: InputDecoration(
+                hintText: 'New Batsmen',
+              ),
+            ),
+            suggestionsCallback: (pattern) {
+              return newlist
+                  .where((player) =>
+                      player.toLowerCase().contains(pattern.toLowerCase()))
+                  .where((player) => player != striker.value)
+                  .toList();
+            },
+            itemBuilder: (context, suggestion) {
+              return ListTile(
+                title: Text(suggestion),
+              );
+            },
+            onSuggestionSelected: (suggestion) {
+              newBtController.text = suggestion;
+              nonStriker.value = suggestion;
+            },
+          ),
+
+        ],
       ),
       actions: <Widget>[
         TextButton(
@@ -46,17 +109,15 @@ class MemberSelectionDialog extends GetWidget {
         TextButton(
           child: Text('OK'),
           onPressed: () {
-            final enteredUsername = _textEditingController.text.trim();
-            // Perform the desired action with the entered username
-            if (enteredUsername.isNotEmpty) {
-              print('Entered username: $enteredUsername');
-              // Additional logic or validation can be performed here
-            }
+
+            currentBt_.value = currentBatsmenList.firstWhere((element) => element.displayName == currentBtController.text);
+            newBt_.value = newBatsmenList.firstWhere((element) => (element.displayName == newBtController.text));
+
             Get.back();
           },
         ),
       ],
     );
   }
-
 }
+
