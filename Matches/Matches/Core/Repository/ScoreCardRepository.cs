@@ -189,7 +189,7 @@ namespace Matches.Core.Repository
             int VictoryTeamId = (VTeamId == null)?0:(int) VTeamId;
 
             if( scoreCard.HostTeamId == VictoryTeamId){
-                if(scoreCard.IsHostInnings ){
+                if(!scoreCard.IsHostInnings ){
                     result = scoreCard.HostTeamName
                          + " Won By " +(scoreCard.HostTeamInnings.TotalWicktes - scoreCard.HostTeamInnings.Wickets)
                          + " Wickets ";

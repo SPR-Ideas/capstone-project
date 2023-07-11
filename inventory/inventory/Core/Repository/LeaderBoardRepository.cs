@@ -44,8 +44,8 @@ namespace inventory.Core.Repository
             // It Adds the User Socre to each and every matche to their profile.
             try{
                 UsersModels? user  = await _context.Users!.FindAsync(userId);
-                user!.Runs = runs;
-                user.Wickets = wickets;
+                user!.Runs += runs;
+                user.Wickets += wickets;
                 user.Matches ++;
                 _context.Users.Update(user);
             }catch(Exception ){return false;}

@@ -103,7 +103,7 @@ class CricketController extends GetxController {
     if(isWide.value)return "WD";
     else if(isNoBall.value)return "NB";
     else if(isByes.value)return "B";
-    else if(isWicket.value)return "W";
+    else if(isWicket.value)return "WK";
     else return "";
   }
 
