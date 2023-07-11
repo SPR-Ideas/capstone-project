@@ -6,8 +6,8 @@ class SignUpmodel {
     required this.name,
     required this.age,
     required this.role,
-    required this.battingStyle,
-    required this.blowingStyle,
+    required this.battingStyles,
+    required this.blowingStyles,
     required this.isExternal,
     required this.matches,
     required this.runs,
@@ -21,8 +21,8 @@ class SignUpmodel {
   late final String name;
   late final int age;
   late final String role;
-  late final String battingStyle;
-  late final String blowingStyle;
+  late final String battingStyles;
+  late final String blowingStyles;
   late final bool isExternal;
   late final int runs;
   late final int wickets;
@@ -36,8 +36,8 @@ class SignUpmodel {
     name = json['name'];
     age = json['age'];
     role = json['role'];
-    battingStyle = json['battingStyle'];
-    blowingStyle = json['blowingStyle'];
+    battingStyles = json['battingStyles'];
+    blowingStyles = json['blowingStyles'];
     isExternal = json['isExternal'];
     runs = json['runs'];
     wickets = json['wickets'];
@@ -53,8 +53,8 @@ class SignUpmodel {
     _data['name'] = name;
     _data['age'] = age;
     _data['role'] = role;
-    _data['battingStyle'] = battingStyle;
-    _data['blowingStyle'] = blowingStyle;
+    _data['battingStyles'] = battingStyles;
+    _data['blowingStyles'] = blowingStyles;
     _data['isExternal'] = isExternal;
     _data['runs'] = runs;
     _data['wickets'] = wickets;

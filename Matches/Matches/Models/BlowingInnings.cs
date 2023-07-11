@@ -14,5 +14,7 @@ namespace Matches.Models
         public int Wickets {get;set;}
         public int BallsBlowed {get;set;}
 
+        public int IsCurrent {get;set;}
+
     }
 }

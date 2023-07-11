@@ -7,5 +7,9 @@ namespace Matches.Core
     {
         // Task<InningsScoreCard> createInningWithTeam(teamInstanceWithUser team);
 
+        Task<bool> FreshInnings(freshInnings data);
+        Task<bool> changeBatsMen(changeBatsmenReq request);
+        Task<bool> changeblower(changeBlowerReq request);
+
     }
 }

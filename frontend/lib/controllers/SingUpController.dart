@@ -30,13 +30,13 @@ class SingUpController extends GetxController{
     }
 
     void singUp({String? Username = null,String?Password=null,String displayImage=""})async {
-        if(!isfilled()) return;
+        if(isfilled()) return;
         var response= await makePostRequest(
             "/Auth/SingUpUser",
             SignUpmodel(
             id: 0, userName: (Username!=null)?Username:username.text, name: fullname.text,
             password:(Password!=null)?Password:password.text, role: role.text, age: int.parse(age.text) ,
-            battingStyle: battingStyle.text, blowingStyle: blowingStyle.text,
+            battingStyles: battingStyle.text, blowingStyles: blowingStyle.text,
             isExternal:(Username!=null)? true: false, matches: 0,runs: 0,wickets: 0, displayImage: displayImage
         ).toJson()
         );

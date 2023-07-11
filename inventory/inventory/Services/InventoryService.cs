@@ -127,6 +127,12 @@ namespace inventory.Services
                 if(request.Count > request.Members.Count)
                     await _unitOfWork.Team.RemovePlayes(request.Id, request.Members.Select(m=>m.Id).ToList());
 
+                var team = await _unitOfWork.Team.GetById(_team.Id);
+                if(team!=null){
+                    team!.Count = team.Members!.Count;
+                    await _unitOfWork.Team.Update(team);
+                }
+
                 await _unitOfWork.CompleteAsync();
                 return new statusResponse{Status= true};
             }
@@ -185,7 +191,7 @@ namespace inventory.Services
             }
         }
 
-        public override async Task<statusResponse> createMatch(MatchInstance request, ServerCallContext context)
+        public override async Task<statusResponse_match> createMatch(MatchInstance request, ServerCallContext context)
         {
             try{
                 MatchProto.teamInstanceWithUser val = _mapper.Map<MatchProto.teamInstanceWithUser>((await _unitOfWork.Team.ReturnTeamsWithPlayerInstance(new List<TeamModel>() { await _unitOfWork.Team.GetById(request.VisitorTeamId) }))[0]);
@@ -204,10 +210,11 @@ namespace inventory.Services
 
                 await _unitOfWork.Match.Add(matchtInstance);
                 await _unitOfWork.CompleteAsync();
-                return new statusResponse{Status = true};
+                return new statusResponse_match{Status = true,ScoreCardId=response.ScoreCardId};
             }catch(Exception e) {
                 Console.WriteLine(e);
-                return new statusResponse{Status=false};}
+                return new statusResponse_match{Status = false};
+        }
         }
         public override async Task<listofTeams> getTeams(searchStringRequest request, ServerCallContext context)
         {

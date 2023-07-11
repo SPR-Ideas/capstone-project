@@ -25,14 +25,73 @@ namespace Gateway.Controllers
 
         [HttpPut("UpdateEachBall")]
         public async Task<IActionResult> UpdateEachBall(EachBallUpdate update){
-            var response = await _mathcService.updateEachBallAsync(
+            try{
+                var response = await _mathcService.updateEachBallAsync(
                 new MatchProtos.EachBallRequest{
                     BatsmanId = update.BatsmanId,
                     BlowerId = update.BlowerId,
                     BlowerName = update.BlowerName,
+                    Options = update.Options,
+                    Runs = update.Runs,
+                    ScoreCardID = update.ScoreCardID,
                 }
             );
-          return Ok(response);
+            return Ok(response);
+            }
+            catch(Exception){
+                return Ok();
+            }
+
         }
+
+        [HttpGet("GetScoreCard")]
+        public async Task<IActionResult> GetScoreCard(int Id){
+            var response = await _mathcService.getScoreCardByIdAsync(
+                    new MatchProtos.scoreCardRequest{Id = Id});
+            return Ok(response);
+        }
+
+        [HttpPut("changeBatsman")]
+        public async Task<IActionResult> ChangeBatsman(changeBatsmen request){
+            var response = await _mathcService.changeBatsmenAsync(
+                    new MatchProtos.changeBatsmenReq{
+                        CurrentBatsmen = request.currentBatsmen,
+                        InningsId = request.inningsId,
+                        NewBatsmen = request.newBatsmen
+                        }
+            );
+            return Ok(response);
+
+        }
+
+
+        [HttpPut("changeBlower")]
+        public async Task<IActionResult> ChangeBlower(changeBlower request){
+            var response = await _mathcService.changeBlowerAsync(
+                    new MatchProtos.changeBlowerReq{
+                        CurrentBlowerId = request.currentBlowerId,
+                        InningsId = request.inningsId,
+                        NewBlowerId = request.newBlowerId
+                        }
+            );
+            return Ok(response);
+
+        }
+
+        [HttpPut("freshInnings")]
+        public async Task<IActionResult> FreshInnings(freshInnings request){
+            var response = await _mathcService.setfreshInningsAsync(
+                    new MatchProtos.freshInnings{
+                        InningsId = request.InningsId,
+                        BlowerId = request.blowerId,
+                        NonStrikerId = request.nonStrikerId,
+                        StrikerId = request.strikerId
+                    });
+
+            return Ok(response);
+
+        }
+
+
     }
 }

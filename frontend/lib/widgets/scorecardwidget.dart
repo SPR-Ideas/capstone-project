@@ -8,6 +8,8 @@ class ScoreCardPanel extends StatelessWidget {
   final int teamBScore;
   final int teamAWickets;
   final int teamBWickets;
+  final int teamAballs;
+  final int teamBballs;
   final String result;
   final Function? onpress;
 
@@ -18,6 +20,8 @@ class ScoreCardPanel extends StatelessWidget {
     required this.teamBScore,
     required this.teamAWickets,
     required this.teamBWickets,
+    required this.teamAballs,
+    required this.teamBballs,
     required this.result,
     this.onpress
   });
@@ -37,9 +41,9 @@ class ScoreCardPanel extends StatelessWidget {
             ),
           ),
           SizedBox(height: 10.0),
-          _buildScoreRow(teamAName, teamAScore, teamAWickets),
+          _buildScoreRow(teamAName, teamAScore, teamAWickets ,teamAballs),
           SizedBox(height: 10.0),
-          _buildScoreRow(teamBName, teamBScore, teamBWickets),
+          _buildScoreRow(teamBName, teamBScore, teamBWickets,teamBballs),
           SizedBox(height: 15.0),
           Text(
             ' $result',
@@ -66,7 +70,7 @@ class ScoreCardPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildScoreRow(String teamName, int score, int wickets) {
+  Widget _buildScoreRow(String teamName, int score, int wickets,int balls) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -92,7 +96,7 @@ class ScoreCardPanel extends StatelessWidget {
                 ),
                 SizedBox(width: 10,),
                 Text(
-                ' 0.0 ',
+                ' ${(balls/6).toInt()}.${balls%6} ',
                 style: TextStyle(fontSize: 14.0,color: Colors.grey, fontWeight: FontWeight.bold),
                 ),
             ],

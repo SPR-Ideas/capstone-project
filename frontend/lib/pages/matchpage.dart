@@ -13,6 +13,7 @@ import 'package:get_storage/get_storage.dart';
 import '../utils/constant.dart';
 import '../widgets/Snackbar.dart';
 import '../widgets/inputwidgets.dart';
+import 'enginepage.dart';
 
 Widget matchPage()
 {
@@ -85,6 +86,7 @@ class MatchControlller extends GetxController{
                 if(response.data!=null){
                     if(response.data["status"]){
                         Snackbar("Match Created Successfully","",Colors.green.shade300);
+                        Get.to( CricketCounterPage(ScoreCardId: response.data["scoreCardId"],));
                     }
                     else{
                         Snackbar("Error Occur while creating a Match","",Colors.red.shade300);

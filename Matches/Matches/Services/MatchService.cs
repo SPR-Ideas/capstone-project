@@ -52,5 +52,42 @@ namespace Matches.Services
             response.ScoreCard.Add(ScoreCards.Select(scoreCard => _mapper.Map<scoreCardRequest>(scoreCard)).ToList());
             return response;
         }
+
+        public override async Task<statusResponse> changeBatsmen(changeBatsmenReq request, ServerCallContext context)
+        {
+            try{
+                await _unitOfwork.Innings.changeBatsMen(request);
+                await _unitOfwork.CompleteAsync();
+                return new statusResponse{Status= true};
+            }
+            catch(Exception ){
+                return new statusResponse{Status= false};
+            }
+        }
+
+        public override async Task<statusResponse> changeBlower(changeBlowerReq request, ServerCallContext context)
+        {
+            try{
+                await _unitOfwork.Innings.changeblower(request);
+                await _unitOfwork.CompleteAsync();
+                return new statusResponse{Status= true};
+            }
+            catch(Exception ){
+                return new statusResponse{Status= false};
+            }
+        }
+
+        public override async Task<statusResponse> setfreshInnings(freshInnings request, ServerCallContext context)
+        {
+            try{
+                await _unitOfwork.Innings.FreshInnings(request);
+                await _unitOfwork.CompleteAsync();
+                return new statusResponse{Status= true};
+            }
+            catch(Exception ){
+                return new statusResponse{Status= false};
+            }
+        }
+
     }
 }

@@ -179,3 +179,7 @@ message searchStringRequest{
 message listofTeams{
     repeated  teamInstance teamInstance =1 ;
 }
+message statusResponse_match{
+    bool status =1;
+    int32 ScoreCardId=2;
+}

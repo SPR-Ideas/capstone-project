@@ -209,15 +209,15 @@ class Matches {
 
 class ScoreCard {
   ScoreCard({
-    required this.id,
-    required this.overs,
-    required this.hostTeamId,
-    required this.visitorTeamId,
-    required this.hostTeamName,
-    required this.visitorTeamName,
-    required this.hostTeamInnings,
-    required this.visitorTeamInnings,
-    required this.isHostInnings,
+    this.id=0,
+    this.overs=0,
+    this.hostTeamId=0,
+    this.visitorTeamId=0,
+    this.hostTeamName="",
+    this.visitorTeamName="",
+    this.hostTeamInnings,
+    this.visitorTeamInnings,
+    this.isHostInnings=false,
   });
   late final int id;
   late final int overs;
@@ -225,8 +225,8 @@ class ScoreCard {
   late final int visitorTeamId;
   late final String hostTeamName;
   late final String visitorTeamName;
-  late final HostTeamInnings hostTeamInnings;
-  late final HostTeamInnings visitorTeamInnings;
+  late final HostTeamInnings? hostTeamInnings;
+  late final HostTeamInnings? visitorTeamInnings;
   late final bool isHostInnings;
 
   ScoreCard.fromJson(Map<String, dynamic> json){
@@ -249,7 +249,7 @@ class ScoreCard {
     _data['visitorTeamId'] = visitorTeamId;
     _data['hostTeamName'] = hostTeamName;
     _data['visitorTeamName'] = visitorTeamName;
-    _data['hostTeamInnings'] = hostTeamInnings.toJson();
+    _data['hostTeamInnings'] = hostTeamInnings!.toJson();
     _data['visitorTeamInnings'] = visitorTeamInnings;
     _data['isHostInnings'] = isHostInnings;
     return _data;
@@ -258,15 +258,15 @@ class ScoreCard {
 
 class HostTeamInnings {
   HostTeamInnings({
-    required this.id,
-    required this.wickets,
-    required this.balls,
-    required this.score,
-    required this.totalOver,
-    required this.totalWickets,
-    required this.isInningsCompleted,
-    required this.battingStats,
-    required this.blowingStats,
+    this.id =0,
+    this.wickets=0,
+    this.balls=0,
+    this.score=0,
+    this.totalOver=0,
+    this.totalWickets=0,
+    this.isInningsCompleted=false,
+    this.battingStats,
+    this.blowingStats ,
   });
   late final int id;
   late final int wickets;
@@ -275,8 +275,8 @@ class HostTeamInnings {
   late final int totalOver;
   late final int totalWickets;
   late final bool isInningsCompleted;
-  late final List<BattingStats> battingStats;
-  late final List<BlowingStats> blowingStats;
+  late final List<BattingStats>? battingStats;
+  late final List<BlowingStats>? blowingStats;
 
   HostTeamInnings.fromJson(Map<String, dynamic> json){
     id = json['id'];
@@ -299,23 +299,23 @@ class HostTeamInnings {
     _data['totalOver'] = totalOver;
     _data['totalWickets'] = totalWickets;
     _data['isInningsCompleted'] = isInningsCompleted;
-    _data['battingStats'] = battingStats.map((e)=>e.toJson()).toList();
-    _data['blowingStats'] = blowingStats.map((e)=>e.toJson()).toList();
+    _data['battingStats'] = battingStats!.map((e)=>e.toJson()).toList();
+    _data['blowingStats'] = blowingStats!.map((e)=>e.toJson()).toList();
     return _data;
   }
 }
 
 class BattingStats {
   BattingStats({
-    required this.id,
-    required this.displayName,
-    required this.userId,
-    required this.runs,
-    required this.balls,
-    required this.sixer,
-    required this.four,
-    required this.blowedBy,
-    required this.caughtBy,
+    this.id=0,
+    this.displayName="",
+    this.userId=0,
+    this.runs=0,
+    this.balls=0,
+    this.sixer=0,
+    this.four=0,
+    this.blowedBy="",
+    this.caughtBy="",
   });
   late final int id;
   late final String displayName;
@@ -326,6 +326,7 @@ class BattingStats {
   late final int four;
   late final String blowedBy;
   late final String caughtBy;
+  late final int isCurrent;
 
   BattingStats.fromJson(Map<String, dynamic> json){
     id = json['id'];
@@ -337,6 +338,7 @@ class BattingStats {
     four = json['four'];
     blowedBy = json['blowedBy'];
     caughtBy = json['caughtBy'];
+    isCurrent = json['isCurrent']??0;
   }
 
   Map<String, dynamic> toJson() {
@@ -350,18 +352,38 @@ class BattingStats {
     _data['four'] = four;
     _data['blowedBy'] = blowedBy;
     _data['caughtBy'] = caughtBy;
+    _data['isCurrent'] = isCurrent;
+
     return _data;
+  }
+
+    @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is BattingStats &&
+        other.id == id &&
+        other.displayName == displayName &&
+        other.userId == userId;
+    // Add additional fields for comparison if needed
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^ displayName.hashCode ^ userId.hashCode;
+    // Combine additional fields for hashing if needed
   }
 }
 
 class BlowingStats {
   BlowingStats({
-    required this.id,
-    required this.displayNames,
-    required this.userId,
-    required this.runs,
-    required this.wickets,
-    required this.ballsBlowed,
+    this.id =0,
+    this.displayNames="",
+    this.userId=0,
+    this.runs=0,
+    this.wickets=0,
+    this.ballsBlowed=0,
+    this.isCurrent=0
   });
   late final int id;
   late final String displayNames;
@@ -369,6 +391,7 @@ class BlowingStats {
   late final int runs;
   late final int wickets;
   late final int ballsBlowed;
+  late final int isCurrent;
 
   BlowingStats.fromJson(Map<String, dynamic> json){
     id = json['id'];
@@ -377,6 +400,7 @@ class BlowingStats {
     runs = json['runs'];
     wickets = json['wickets'];
     ballsBlowed = json['ballsBlowed'];
+    isCurrent = json['isCurrent']??0;
   }
 
   Map<String, dynamic> toJson() {
@@ -387,6 +411,7 @@ class BlowingStats {
     _data['runs'] = runs;
     _data['wickets'] = wickets;
     _data['ballsBlowed'] = ballsBlowed;
+    _data['isCurrent'] = isCurrent;
     return _data;
   }
 }

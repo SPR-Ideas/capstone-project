@@ -13,12 +13,14 @@ namespace Matches.Data
     {
         private readonly ApplicationDbContext _context;
         public IScoreCardRepository ScoreCard { get; set; }
+        public InningsCardRepository Innings { get; }
 
         public UnitOfWork(
                         ApplicationDbContext context,
                         InventoryService.inventoryClient inventoryClient){
             _context = context;
             ScoreCard = new ScoreCardRepository(context,inventoryClient);
+            Innings = new InningsCardRepository(context);
         }
 
         public async Task CompleteAsync(){

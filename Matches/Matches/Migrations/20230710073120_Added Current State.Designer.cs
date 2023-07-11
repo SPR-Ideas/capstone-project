@@ -4,6 +4,7 @@ using Matches.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Matches.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230710073120_Added Current State")]
+    partial class AddedCurrentState
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace Matches.Migrations
                     b.Property<int?>("InningsScoreCardId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IsCurrent")
+                    b.Property<int?>("IsCurrent")
                         .HasColumnType("int");
 
                     b.Property<int>("Runs")
@@ -117,7 +120,7 @@ namespace Matches.Migrations
                     b.Property<bool>("IsInningsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Score")
+                    b.Property<int>("Sore")
                         .HasColumnType("int");
 
                     b.Property<int>("TotalOver")

@@ -7,10 +7,13 @@ import 'package:get/get.dart';
 
 Widget teamsPage(Inventorymodel? inventory){
     if(inventory!=null){
-        if(inventory.teams!.length!=0)
-        return _teamsPage(inventorymodel: inventory);
-        else
-        return Center(child: Text("No Teams Yet"),);
+        if(inventory.teams!.length!=0){
+
+            return _teamsPage(inventorymodel: inventory);
+        }
+        else{
+            return _teamsPage(inventorymodel: inventory);
+        }
     }
     else{return Center(child: Text("Issue on Server"),);}
 }

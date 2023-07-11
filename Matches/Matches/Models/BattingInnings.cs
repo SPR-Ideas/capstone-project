@@ -12,5 +12,6 @@ namespace Matches.Models
         public int Four {get;set;}
         public string? BlowedBy {get; set; }
         public string? CaughtBY {get;set;}
+        public int IsCurrent {get;set;}
     }
 }

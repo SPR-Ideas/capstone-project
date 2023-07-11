@@ -24,7 +24,7 @@ service inventory{
     rpc getLeaderBoard(LeaderBoardRequest) returns (ListOfUser);
 
     // Match Services
-    rpc  createMatch(MatchInstance) returns (statusResponse);
+    rpc  createMatch(MatchInstance) returns (statusResponse_match);
     rpc  completeMatch(completMatachRequest) returns (statusResponse);
 
     rpc getTeams(searchStringRequest) returns (listofTeams);

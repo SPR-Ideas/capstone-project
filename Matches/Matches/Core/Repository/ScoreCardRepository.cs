@@ -108,12 +108,12 @@ namespace Matches.Core.Repository
 
             if(options.Contains(request.Options)){
 
-                innings.Sore++;  // Penalty runs for wide and NoBall.
+                innings.Score++;  // Penalty runs for wide and NoBall.
                 blower!.Runs++;
             }
 
             // Runs Scored by Batsment
-            innings.Sore += request.Runs;
+            innings.Score += request.Runs;
             if(request.Options == ""||request.Options=="NB"){
                 batsmam!.Runs +=request.Runs;
                 if(request.Options == "NB"){ batsmam.Balls++;}
@@ -138,7 +138,7 @@ namespace Matches.Core.Repository
             if(innings.Balls/6 == innings.TotalOver|| innings.TotalWicktes == innings.Wickets ){
                 innings.IsInningsCompleted = true;
             }
-            if(inningsTemp.IsInningsCompleted && inningsTemp.Sore<innings.Sore){
+            if(inningsTemp.IsInningsCompleted && inningsTemp.Score<innings.Score){
                 innings.IsInningsCompleted=true;
             }
 
@@ -183,7 +183,7 @@ namespace Matches.Core.Repository
 
         public inventory.Protos.completMatachRequest concludeMatch(ScoreCard scoreCard){
             string result = "";
-            int? VTeamId = (scoreCard.HostTeamInnings!.Sore > scoreCard.VisitorTeamInnings!.Sore)?
+            int? VTeamId = (scoreCard.HostTeamInnings!.Score > scoreCard.VisitorTeamInnings!.Score)?
                                         scoreCard.HostTeamId: scoreCard.VistorTeamId;
 
             int VictoryTeamId = (VTeamId == null)?0:(int) VTeamId;
@@ -196,19 +196,19 @@ namespace Matches.Core.Repository
                 }
                 else {
                     result = scoreCard.HostTeamName
-                            + " Won By " + (scoreCard.HostTeamInnings.Sore - scoreCard.VisitorTeamInnings.Sore)
+                            + " Won By " + (scoreCard.HostTeamInnings.Score - scoreCard.VisitorTeamInnings.Score)
                             + " Runs.";
                 }
             }
             else{
-                if(!scoreCard.IsHostInnings ){
+                if(scoreCard.IsHostInnings ){
                     result = scoreCard.VisitorTeamName
                          + " Won By " +(scoreCard.VisitorTeamInnings.TotalWicktes - scoreCard.VisitorTeamInnings.Wickets)
                          + " Wickets ";
                 }
                 else {
                     result = scoreCard.HostTeamName
-                            + " Won By " + (scoreCard.VisitorTeamInnings.Sore - scoreCard.HostTeamInnings.Sore)
+                            + " Won By " + (scoreCard.VisitorTeamInnings.Score - scoreCard.HostTeamInnings.Score)
                             + " Runs.";
                 }
             }
@@ -230,10 +230,14 @@ namespace Matches.Core.Repository
                 });
             }
             foreach(var _user in _scorecard.VisitorTeamInnings!.BattingStats!){
-                userMap.Add(_user.UserId , new inventory.Protos.userInstance{
+                var flag = userMap.GetValueOrDefault(_user.UserId);
+                if(flag ==null){
+                    userMap.Add(_user.UserId , new inventory.Protos.userInstance{
                     Id = _user.UserId,
                     Runs = _user.Runs,
                 });
+                }
+
             }
             foreach(var _user in _scorecard.VisitorTeamInnings!.BlowingStats!){
                 inventory.Protos.userInstance? u =  userMap.GetValueOrDefault(_user.UserId);

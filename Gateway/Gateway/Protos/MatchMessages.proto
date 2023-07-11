@@ -92,6 +92,7 @@ message BattingInningsgrpc {
     int32 Four = 7;
     string BlowedBy = 8;
     string CaughtBy = 9;
+    int32 IsCurrent = 10;
 }
 
 message BlowingInningsgrpc {
@@ -101,7 +102,28 @@ message BlowingInningsgrpc {
     int32 Runs = 4;
     int32 Wickets = 5;
     int32 BallsBlowed = 6;
+    int32 IsCurrent = 8;
 }
 message listOfScoreCard{
     repeated scoreCardRequest scoreCard =1;
+}
+
+
+message freshInnings{
+    int32 InningsId = 1;
+    int32 strikerId =2;
+    int32 nonStrikerId =3;
+    int32 blowerId = 4;
+}
+
+message changeBatsmenReq{
+    int32 inningsId =1;
+    int32 currentBatsmen =2;
+    int32 newBatsmen = 3;
+}
+
+message changeBlowerReq{
+    int32 inningsId = 1;
+    int32 currentBlowerId = 2;
+    int32 newBlowerId = 3;
 }

@@ -11,4 +11,9 @@ service Matches{
     rpc CreateScoreCard(ScoreCardCreateRequest) returns (scoreCardResponse);
     rpc getScoreCardById(scoreCardRequest)returns (scoreCardRequest);
     rpc getScoreCardsByIds(listOfScoreCard)returns(listOfScoreCard);
+
+    rpc setfreshInnings(freshInnings)returns (statusResponse);
+    rpc changeBatsmen(changeBatsmenReq)returns (statusResponse);
+    rpc changeBlower(changeBlowerReq)returns (statusResponse);
+
 }

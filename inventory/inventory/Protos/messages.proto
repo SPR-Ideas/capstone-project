@@ -99,6 +99,10 @@ message MatchInstance{
     int32 ScoreCardId = 9;
     bool IsHostInnings = 10;
 }
+message statusResponse_match{
+    bool status =1;
+    int32 ScoreCardId=2;
+}
 
 message completMatachRequest {
     int32 scoreCardId = 1;
