@@ -58,7 +58,6 @@ namespace Matches.Core.Repository
                         .Include(a=>a.BlowingStats)
                         .FirstAsync(x=>x.Id==data.InningsId);
 
-
                 var striker  = scoreCard!.BattingStats!.First(x=>x.Id==data.StrikerId);
                 striker.IsCurrent = 1;
                 var nonstriker  = scoreCard!.BattingStats!.First(x=>x.Id==data.NonStrikerId);

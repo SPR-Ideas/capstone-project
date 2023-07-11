@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/constant.dart';
+import 'package:frontend/widgets/nextOver.dart';
 import 'package:get/get.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get_storage/get_storage.dart';
@@ -11,12 +12,13 @@ import '../widgets/FreshInning.dart';
 import '../widgets/Snackbar.dart';
 import '../widgets/fallofWickte.dart';
 
-void makeServercall(CricketController controller)async{
+Future<int> makeServercall(CricketController controller)async{
     var response = await makeGetRequest("/ScoreCard/GetScoreCard?Id=${controller.scorecard.value.id}");
     if (response!=null){
         controller.updateScoreCard(
             ScoreCard.fromJson(response!.data ));
     }
+    return 0;
 }
 
 List<HostTeamInnings> GetCurrentInnings(ScoreCard scoreCard){
@@ -87,17 +89,37 @@ class CricketController extends GetxController {
     late Rx<BattingStats> nonStriker = BattingStats().obs;
     late Rx<BlowingStats> blower = BlowingStats().obs;
 
-    void swapBatsmen(){
+    void swapBatsmen() {
         StrikerId.value = nonStriker.value.id;
         GetCurrentPlayers(currentInnings,striker,nonStriker,blower,stateChange,otherInnings,StrikerId);
     }
 
-    void updateScoreCard( ScoreCard scoreCard){
+    void updateScoreCard( ScoreCard scoreCard) async{
         scorecard.value = scoreCard;
         var list =  GetCurrentInnings(scoreCard);
         currentInnings.value = list[0];
         otherInnings.value = list[1];
 
+        if((currentInnings.value.balls)%6==0 && currentInnings.value.balls!=0&& stateChange.value==0){
+            Rx<BlowingStats> newBl = BlowingStats().obs;
+            await Get.dialog( NextOver(
+                // currentBlowerList: currentBlowerList,
+                newBlowerList: otherInnings.value.blowingStats!.where((element) => element.isCurrent==0).toList(),
+                // currentBl_: currentBl_,
+                newBl_: newBl));
+
+                var response = await makePutRequest("/ScoreCard/changeBlower", {
+                "inningsId":otherInnings.value.id,
+                "currentBlowerId": blower.value.id,
+                "newBlowerId": newBl.value.id,
+                });
+
+            stateChange.value = 1;
+            await makeServercall(this);
+
+
+        }
+        stateChange.value=0;
         GetCurrentPlayers(currentInnings,striker,nonStriker,blower,stateChange,otherInnings,StrikerId);
         }
   // RxInt inningsScore = 0.obs;
@@ -139,6 +161,7 @@ class CricketController extends GetxController {
 
             print(response!.data);
         }
+
         var response = await makePutRequest("/ScoreCard/UpdateEachBall",{
             "scoreCardID":scorecard.value.id,
             "runs": runs,
@@ -238,7 +261,7 @@ class CricketCounterPage extends HookWidget {
 
                             ],),
                             Obx(() => Text(' CR : ${
-                                    (cricketController.currentInnings.value.score/(cricketController.currentInnings.value.balls/6))}'
+                                    (cricketController.currentInnings.value.score/(cricketController.currentInnings.value.balls/6)).toStringAsPrecision(2)}'
                                 )),
                         ],)
 
