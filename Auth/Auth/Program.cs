@@ -21,6 +21,17 @@ namespace Auth
                     builder.Configuration.GetConnectionString("LocalDb")
                 )
             );
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             builder.Services.AddScoped<IUnitOfWork,UnitofWork>();
             var app = builder.Build();
 
@@ -28,7 +39,7 @@ namespace Auth
             app.MapGrpcReflectionService() ;
             app.MapGrpcService<AuthService>();
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-
+            app.UseCors();
             app.Run();
         }
     }

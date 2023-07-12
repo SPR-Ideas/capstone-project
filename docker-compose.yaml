@@ -1,0 +1,39 @@
+version: '3.4'
+services:
+
+  matches:
+    image : gullycricket.azurecr.io/microservices/matches
+    # build:
+    #   context: ./Matches/Matches
+    #   dockerfile: Dockerfile
+    networks:
+      - mynetwork
+
+  gateway:
+    image : gullycricket.azurecr.io/microservices/gateway
+    # build:
+    #   context: ./Gateway/Gateway
+    #   dockerfile: Dockerfile
+    networks:
+      - mynetwork
+    ports:
+      - 8001:80
+
+  inventory:
+    image : gullycricket.azurecr.io/microservices/inventory
+    # build:
+    #   context: ./inventory/inventory
+    #   dockerfile: Dockerfile
+    networks:
+      - mynetwork
+
+  auth:
+    image : gullycricket.azurecr.io/microservices/auth
+    # build:
+    #   context: ./Auth/Auth
+    #   dockerfile: Dockerfile
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:

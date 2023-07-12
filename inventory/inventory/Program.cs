@@ -47,11 +47,21 @@ namespace inventory
 
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
 
             var AuthChannel = GrpcChannel.ForAddress(
-                                    "http://localhost:5218");
+                                    "http://auth:80");
             var MatchChannel = GrpcChannel.ForAddress(
-                                    "http://localhost:5093");
+                                    "http://matches:80");
             var client = new AuthProto.authServiceClient(AuthChannel);
              var MatchClient = new MatchProto.MatchesClient(MatchChannel);
 
@@ -65,7 +75,7 @@ namespace inventory
 
             app.MapGrpcReflectionService();
             app.UseAuthorization();
-
+            app.UseCors(); 
 
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

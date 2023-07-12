@@ -43,12 +43,12 @@ namespace Gateway
 
 
             var AuthChannel = GrpcChannel.ForAddress(
-                                    "http://localhost:5218");
+                                    "http://auth:80");
             var MatchChannel = GrpcChannel.ForAddress(
-                                    "http://localhost:5093");
+                                    "http://matches:80");
 
             var InventoryChannel = GrpcChannel.ForAddress(
-                                    "http://localhost:5106");
+                                    "http://inventory:80");
 
             var Authclient = new AuthProto.authServiceClient(AuthChannel);
             var MatchClient = new MatchProto.MatchesClient(MatchChannel);
@@ -62,11 +62,11 @@ namespace Gateway
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+            // if (app.Environment.IsDevelopment())
+            // {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            // }
 
             app.UseAuthorization();
             app.MapControllers();

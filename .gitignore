@@ -49,3 +49,4 @@ ios/Podfile.lock
 
 # Miscellaneous
 .DS_S
+.dockerKey
