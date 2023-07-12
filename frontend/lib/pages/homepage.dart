@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frontend/controllers/HomeController.dart';
 import 'package:frontend/models/inventoryModels.dart';
+import 'package:frontend/pages/login.dart';
 import 'package:frontend/pages/teampage.dart';
 import 'package:frontend/pages/updateuserpage.dart';
 import 'package:frontend/utils/constant.dart';
@@ -35,9 +36,9 @@ class homePage extends StatelessWidget{
       appBar: AppBar(
         title: const Text("Gully Cricket"),
         centerTitle: true,
-        backgroundColor: primaryColor,
-        actions: [
-          GestureDetector(
+        leading:  Row( children:[
+            SizedBox(width: 20,),
+            Expanded(child: GestureDetector(
             onTap: () => Get.to(updateUserpage(userModel: homecontroller.inventorymodel!.user)),
             child: CircleAvatar(
               radius: 20,
@@ -45,6 +46,17 @@ class homePage extends StatelessWidget{
                 ? NetworkImage(displayImage.value!)
                 : null,
             ),
+          )),
+
+          ]),
+        backgroundColor: primaryColor,
+        actions: [
+          GestureDetector(
+            onTap: () => {
+                Storage.WriteValue("token", ""),
+                Get.to(loginPage())
+            },
+            child: Icon(Icons.logout)
           ),
           const SizedBox(width: 20,),
         ],

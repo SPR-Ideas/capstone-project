@@ -39,19 +39,19 @@ class User {
     required this.matches,
     required this.displayImage,
   });
-  late final int id;
-  late final String userName;
-  late final String name;
-  late final int age;
-  late final String role;
-  late final String battingStyles;
-  late final String blowingStyles;
-  late final String password;
-  late final bool isExternal;
-  late final int runs;
-  late final int wickets;
-  late final int matches;
-  late final String displayImage;
+  late  int id;
+  late  String userName;
+  late  String name;
+  late  int age;
+  late  String role;
+  late  String battingStyles;
+  late  String blowingStyles;
+  late  String password;
+  late  bool isExternal;
+  late  int runs;
+  late  int wickets;
+  late int matches;
+  late  String displayImage;
 
   User.fromJson(Map<String, dynamic> json){
     id = json['id'];

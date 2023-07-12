@@ -173,6 +173,9 @@ class CricketController extends GetxController {
         if(response!.data["status"]==true){
             makeServercall(this);
         }
+        if(runs%2!=0){
+            swapBatsmen();
+        }
     }
   void toggleWide(bool? value) {
     isWide.value = value?? isWide.value;
@@ -261,7 +264,7 @@ class CricketCounterPage extends HookWidget {
 
                             ],),
                             Obx(() => Text(' CR : ${
-                                    (cricketController.currentInnings.value.score/(cricketController.currentInnings.value.balls/6)).toStringAsPrecision(2)}'
+                                    (cricketController.currentInnings.value.score/(cricketController.currentInnings.value.balls/6)).toStringAsFixed(2)}'
                                 )),
                         ],)
 
@@ -324,7 +327,7 @@ class CricketCounterPage extends HookWidget {
                                     SizedBox(width: 33,),
                                     Obx(() => Text(cricketController.striker.value.sixer.toString())), // 6s
                                     SizedBox(width:30),
-                                    Obx(() => Text("${((cricketController.striker.value.runs)/(cricketController.striker.value.balls)).toStringAsFixed(2)}")), // Sr
+                                    Obx(() => Text("${(((cricketController.striker.value.runs)/(cricketController.striker.value.balls))*100).toStringAsFixed(1)}")), // Sr
                                 ]
                             )
                         ],),
@@ -345,7 +348,7 @@ class CricketCounterPage extends HookWidget {
                                     SizedBox(width: 33,),
                                     Obx(() => Text(cricketController.nonStriker.value.sixer.toString())), // 6s
                                     SizedBox(width:30,),
-                                    Obx(() => Text("${(cricketController.nonStriker.value.runs)/(cricketController.striker.value.balls)}")), // Sr
+                                    Obx(() => Text("${(((cricketController.nonStriker.value.runs)/(cricketController.nonStriker.value.balls))*100).toStringAsFixed(1)}")), // Sr
                                 ]
                             )
                         ],),
@@ -400,7 +403,7 @@ class CricketCounterPage extends HookWidget {
                                     SizedBox(width: 35,),
                                     Obx(()=>Text(cricketController.blower.value.wickets.toString())),
                                     SizedBox(width: 35,),
-                                    Obx(()=>Text( (cricketController.blower.value.runs/ cricketController.blower.value.ballsBlowed).toDouble().toString())),
+                                    Obx(()=>Text( (cricketController.blower.value.runs/ cricketController.blower.value.ballsBlowed).toStringAsFixed(2))),
                                 ],
                             )
 

@@ -8,7 +8,7 @@ const primaryColor =  Color.fromRGBO(19,133,13,1);
 
 final dio = Dio();
 // final BaseUrl = "http://10.0.2.2:5203/api";
-final BaseUrl = "http://http://172.190.178.221/api"; //docker local
+final BaseUrl = "http://172.190.178.221/api"; //docker local
 // final BaseUrl = "http://localhost:5203/api";
 final GoogleSignIn GoogleAuth =  GoogleSignIn();
 

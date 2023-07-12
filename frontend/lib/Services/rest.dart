@@ -93,7 +93,7 @@ Future<dynamic?> makePutRequest(String Path,Map data) async {
                             data: data,
                             options: Options(
                                 headers:{"Authorization":"Bearer $AccessToken",}
-                            )).timeout(Duration(seconds:10));
+                            )).timeout(Duration(seconds:25));
 
 
         if(response.statusCode == 200) {
