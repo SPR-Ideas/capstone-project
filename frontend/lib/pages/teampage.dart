@@ -5,18 +5,18 @@ import 'package:frontend/utils/constant.dart';
 import 'package:frontend/widgets/NamewithPhoto.dart';
 import 'package:get/get.dart';
 
-Widget teamsPage(Inventorymodel? inventory){
-    if(inventory!=null){
-        if(inventory.teams!.length!=0){
+// Widget teamsPage(Inventorymodel? inventory){
+//     if(inventory!=null){
+//         if(inventory.teams!.length!=0){
 
-            return TeamsPage(inventorymodel: inventory);
-        }
-        else{
-            return TeamsPage(inventorymodel: inventory);
-        }
-    }
-    else{return Center(child: Text("Issue on Server"),);}
-}
+//             return TeamsPage(inventorymodel: inventory);
+//         }
+//         else{
+//             return TeamsPage(inventorymodel: inventory);
+//         }
+//     }
+//     else{return Center(child: Text("Issue on Server"),);}
+// }
 
 class teampageController extends GetxController{
     Rx<Inventorymodel> inventorymodel = Inventorymodel(
@@ -27,6 +27,7 @@ class teampageController extends GetxController{
 
 class TeamsPage extends StatelessWidget {
   final Inventorymodel? inventorymodel;
+
 
   TeamsPage({Key? key, required this.inventorymodel}) : super(key: key);
 
@@ -47,7 +48,7 @@ class TeamsPage extends StatelessWidget {
                         title: Text(team?.name??"",style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.w500),),
                         subtitle: Text('Members : ${team?.count ?? 0}'),
                         onTap: () {
-                            Get.to(teamEditPage(team: team,teamId: team!.id,));
+                            Get.to(()=>teamEditPage(team: team,teamId: team!.id,));
                         // Handle team selection here
                         },
                     );

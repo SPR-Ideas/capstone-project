@@ -19,18 +19,28 @@ import '../utils/constant.dart';
 
 class TeamMembersController extends GetxController {
   final RxList<Members> membersList = <Members>[].obs;
-  final Teams? team;
+  late Teams? team = Teams();
 
     TextEditingController teamName = new TextEditingController();
   TeamMembersController(this.team){
-    for (Members member in team!.members){
-        membersList.add(member);
-        teamName.text=team!.name;
-    }
+    teamName.text = team!.name;
+    membersList.value = team!.members?? <Members>[];
   }
+
+    updateAgain(Teams _team){
+        try{
+            teamName.text = _team.name;
+        membersList.value = _team.members?? <Members>[];
+        }
+        catch(e){
+
+        }
+
+    }
+
   void removeUser(int Id){
     membersList.removeWhere((x)=>x.user.id == Id);
-    team!.members.removeWhere((x)=>x.user.id ==Id);
+    team!.members!.removeWhere((x)=>x.user.id ==Id);
 
   }
   void addUser(User _user){
@@ -58,7 +68,7 @@ class TeamMembersController extends GetxController {
         Id: team!.id,
         Name: teamName.text,
         Count: team!.count,
-        members: MemberstoMemberClass(team!.members));
+        members: MemberstoMemberClass(team!.members??<Members>[]));
         List<int> ids = _team.members.map((e) => e.userId).toList();
 
         membersList.value.removeWhere((element) =>ids.contains(element.user.id));
@@ -83,14 +93,17 @@ class TeamMembersController extends GetxController {
 class teamEditPage extends StatelessWidget{
     late final teamId;
     final Teams? team;
-  teamEditPage({this.teamId=0,this.team});
+
+    late TeamMembersController membersController;
+
+  teamEditPage({this.teamId=0,this.team,}){
+    membersController = Get.put(TeamMembersController(team));
+  }
 
 
     @override
   Widget build(BuildContext context) {
-
-    TeamMembersController membersController = Get.put(TeamMembersController(team));
-
+    membersController.updateAgain(team!);
     return Scaffold(
         appBar: AppBar(
         title:  Text(team!.name),
@@ -105,7 +118,9 @@ class teamEditPage extends StatelessWidget{
             },
           ),
           SizedBox(width: 20,),
-          GestureDetector(onTap: membersController.save,
+          GestureDetector(onTap: (){
+
+            membersController.save();},
           child : Icon(Icons.save)
           ),
           SizedBox(width: 20,)

@@ -90,15 +90,15 @@ class User {
 
 class Teams {
   Teams({
-    required this.id,
-    required this.name,
-    required this.members,
-    required this.count,
-    required this.captainId,
+    this.id=0,
+    this.name="",
+    this.members,
+    this.count=0,
+    this.captainId=0,
   });
   late final int id;
   late final String name;
-  late final List<Members> members;
+  late final List<Members>? members;
   late final int count;
   late final int captainId;
 
@@ -114,7 +114,7 @@ class Teams {
     final _data = <String, dynamic>{};
     _data['id'] = id;
     _data['name'] = name;
-    _data['members'] = members.map((e)=>e.toJson()).toList();
+    _data['members'] = members!.map((e)=>e.toJson()).toList();
     _data['count'] = count;
     _data['captainId'] = captainId;
     return _data;

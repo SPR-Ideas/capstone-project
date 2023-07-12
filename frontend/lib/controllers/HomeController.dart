@@ -14,7 +14,7 @@ import '../pages/teampage.dart';
 
 class HomeController extends GetxController{
 
-    
+    RxBool teamchange = false.obs;
 
     late Rx<Inventorymodel>? inventorymodel = Rx<Inventorymodel>(Inventorymodel(teams: <Teams>[], matches: <Matches>[]));
     late RxString displayImage = RxString("");
@@ -57,6 +57,7 @@ class HomeController extends GetxController{
         currentTab.value =MatchPage() ;
         break;
       case 1:
+        await InventoryCall();
         currentTab.value = TeamsPage(inventorymodel: inventorymodel!.value);
         break;
       case 2:

@@ -95,36 +95,36 @@ class homeWidget extends HookWidget {
   }
 }
 
-class MyTabController extends GetxController {
+// class MyTabController extends GetxController {
 
-   RxInt selectedIndex = 0.obs;
-   late Rx<StatelessWidget>  currentTab = Rx<StatelessWidget>(MatchPage());
-    final HomeController? model;
-    final homeWidget? widget;
-    MyTabController({this.model,this.widget});
+//    RxInt selectedIndex = 0.obs;
+//    late Rx<StatelessWidget>  currentTab = Rx<StatelessWidget>(MatchPage());
+//     final HomeController? model;
+//     final homeWidget? widget;
+//     MyTabController({this.model,this.widget});
 
-  void changeTabIndex(int index) async {
-    await model!.InventoryCall();
+//   void changeTabIndex(int index) async {
+//     await model!.InventoryCall();
 
-    selectedIndex.value = index;
+//     selectedIndex.value = index;
 
-    switch (index) {
-      case 0:
-        currentTab.value =MatchPage() ;
-        break;
-      case 1:
-        currentTab.value = TeamsPage(inventorymodel: model!.inventorymodel!.value);
-        break;
-      case 2:
-        currentTab.value = HistoryPage(inventorymodel: model!.inventorymodel!.value);
-        break;
-      case 3:
-        currentTab.value = LeaderBoardPage();
-      default:
-        currentTab.value = MatchPage() ;
-    }
-  }
-}
+//     switch (index) {
+//       case 0:
+//         currentTab.value =MatchPage() ;
+//         break;
+//       case 1:
+//         currentTab.value = TeamsPage(inventorymodel: model!.inventorymodel!.value);
+//         break;
+//       case 2:
+//         currentTab.value = HistoryPage(inventorymodel: model!.inventorymodel!.value);
+//         break;
+//       case 3:
+//         currentTab.value = LeaderBoardPage();
+//       default:
+//         currentTab.value = MatchPage() ;
+//     }
+//   }
+// }
 
 
 

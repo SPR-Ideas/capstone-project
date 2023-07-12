@@ -20,7 +20,9 @@ class HistoryPageController  extends GetxController {
     RxList<Matches> matches = <Matches>[].obs;
 
     void updateAgain(Inventorymodel inventorymodel) {
+        try{
         matches.value = inventorymodel.matches.reversed.toList();
+        }catch(e){}
     }
 
     HistoryPageController( Inventorymodel inventorymodel){
@@ -95,8 +97,6 @@ class HistoryPage extends StatelessWidget{
 
     HistoryPage({required this.inventorymodel}){
         historyController = Get.put(HistoryPageController(inventorymodel));
-
-
     }
 
     @override
@@ -116,7 +116,9 @@ class HistoryPage extends StatelessWidget{
                                     var response  = await makeGetRequest("/Inventory/GetInventory");
                                     if(response!=null) historyController.updateAgain(Inventorymodel.fromJson(response.data));
                                 },
-                                child: Icon(Icons.refresh,color: primaryColor,),)
+                                child: Icon(Icons.refresh,color: primaryColor,),
+                                )
+
                         ],)),
                     Expanded(child:
                         Obx(() => ListView.builder(
