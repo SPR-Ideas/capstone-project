@@ -44,11 +44,11 @@ class SearchController extends GetxController {
 
 
 Widget leaderboardPage(){
-    return MyHomePage();
+    return LeaderBoardPage();
 }
 
 
-class MyHomePage extends StatelessWidget {
+class LeaderBoardPage extends StatelessWidget {
   final SearchController searchController = Get.put<SearchController>(SearchController());
 
   @override

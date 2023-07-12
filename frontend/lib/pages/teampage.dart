@@ -9,10 +9,10 @@ Widget teamsPage(Inventorymodel? inventory){
     if(inventory!=null){
         if(inventory.teams!.length!=0){
 
-            return _teamsPage(inventorymodel: inventory);
+            return TeamsPage(inventorymodel: inventory);
         }
         else{
-            return _teamsPage(inventorymodel: inventory);
+            return TeamsPage(inventorymodel: inventory);
         }
     }
     else{return Center(child: Text("Issue on Server"),);}
@@ -25,10 +25,10 @@ class teampageController extends GetxController{
 
 }
 
-class _teamsPage extends StatelessWidget {
+class TeamsPage extends StatelessWidget {
   final Inventorymodel? inventorymodel;
 
-  _teamsPage({Key? key, required this.inventorymodel}) : super(key: key);
+  TeamsPage({Key? key, required this.inventorymodel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

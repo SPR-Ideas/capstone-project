@@ -19,36 +19,41 @@ class homePage extends StatelessWidget{
   Widget build(BuildContext context) {
     return homeWidget();  }
 
-}class homeWidget extends HookWidget {
+}
+class homeWidget extends HookWidget {
+
   @override
   Widget build(BuildContext context) {
     final homecontroller = Get.put(HomeController());
-    final displayImage = useState<String?>(null);
+    // final displayImage = useState<String?>(null);
     // final HomeTabs tabs = Get.put(HomeTabs());
-    late MyTabController myTabController = Get.put(MyTabController( model: homecontroller));
-    useEffect(() {
-      homecontroller.InventoryCall().then((_) => {
-        displayImage.value = homecontroller.inventorymodel!.user!.displayImage,
-      });
-      return null;
-    });
-    return Scaffold(
+    // late MyTabController myTabController = Get.put(MyTabController( model: homecontroller,widget: this));
+
+    // useEffect(() {
+    //   homecontroller.InventoryCall().then((_) => {
+    //     displayImage.value = homecontroller.inventorymodel!.user!.displayImage,
+    //   });
+    //   return null;
+    // },[myTabController.selectedIndex]);
+
+
+    return  Scaffold(
       appBar: AppBar(
         title: const Text("Gully Cricket"),
         centerTitle: true,
-        leading:  Row( children:[
+        leading: Obx(() =>   Row( children:[
             SizedBox(width: 20,),
             Expanded(child: GestureDetector(
-            onTap: () => Get.to(updateUserpage(userModel: homecontroller.inventorymodel!.user)),
+            onTap: () => Get.to(updateUserpage(userModel: homecontroller.inventorymodel!.value.user)),
             child: CircleAvatar(
               radius: 20,
-              backgroundImage: displayImage.value != null
-                ? NetworkImage(displayImage.value!)
+              backgroundImage: homecontroller.displayImage.value != null
+                ? NetworkImage(homecontroller.displayImage.value!)
                 : null,
             ),
           )),
 
-          ]),
+          ])),
         backgroundColor: primaryColor,
         actions: [
           GestureDetector(
@@ -61,10 +66,10 @@ class homePage extends StatelessWidget{
           const SizedBox(width: 20,),
         ],
       ),
-      body: Obx(() =>  myTabController.currentTab.value),
+      body: Obx(() =>  homecontroller.currentTab.value),
       bottomNavigationBar: Obx(() => BottomNavigationBar(
-        currentIndex: myTabController.selectedIndex.value,
-        onTap: myTabController.changeTabIndex,
+        currentIndex: homecontroller.selectedIndex.value,
+        onTap: homecontroller.changeTabIndex,
         selectedLabelStyle: const TextStyle(color: primaryColor),
         selectedItemColor: primaryColor,
         items: const [
@@ -91,29 +96,32 @@ class homePage extends StatelessWidget{
 }
 
 class MyTabController extends GetxController {
-  RxInt selectedIndex = 0.obs;
-   Rx<Widget>  currentTab = matchPage().obs ;
+
+   RxInt selectedIndex = 0.obs;
+   late Rx<StatelessWidget>  currentTab = Rx<StatelessWidget>(MatchPage());
     final HomeController? model;
-    MyTabController({this.model});
+    final homeWidget? widget;
+    MyTabController({this.model,this.widget});
 
-  void changeTabIndex(int index) {
+  void changeTabIndex(int index) async {
+    await model!.InventoryCall();
+
     selectedIndex.value = index;
-
 
     switch (index) {
       case 0:
-        currentTab.value =matchPage() ;
+        currentTab.value =MatchPage() ;
         break;
       case 1:
-        currentTab.value = teamsPage(model!.inventorymodel);
+        currentTab.value = TeamsPage(inventorymodel: model!.inventorymodel!.value);
         break;
       case 2:
-        currentTab.value = historyPage(model!.inventorymodel);
+        currentTab.value = HistoryPage(inventorymodel: model!.inventorymodel!.value);
         break;
       case 3:
-        currentTab.value = leaderboardPage();
+        currentTab.value = LeaderBoardPage();
       default:
-        currentTab.value = matchPage() ;
+        currentTab.value = MatchPage() ;
     }
   }
 }

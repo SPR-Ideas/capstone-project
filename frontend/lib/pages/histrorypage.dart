@@ -2,7 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/Services/rest.dart';
 import 'package:frontend/pages/enginepage.dart';
+import 'package:frontend/utils/constant.dart';
 import 'package:get/get.dart';
 
 import '../models/inventoryModels.dart';
@@ -17,8 +19,13 @@ Widget  historyPage(Inventorymodel? inventory){
 class HistoryPageController  extends GetxController {
     RxList<Matches> matches = <Matches>[].obs;
 
+    void updateAgain(Inventorymodel inventorymodel) {
+        matches.value = inventorymodel.matches.reversed.toList();
+    }
+
     HistoryPageController( Inventorymodel inventorymodel){
         matches.value = inventorymodel!.matches;
+
     }
 
     List<dynamic> CreateScoreCard(Matches match){
@@ -88,17 +95,34 @@ class HistoryPage extends StatelessWidget{
 
     HistoryPage({required this.inventorymodel}){
         historyController = Get.put(HistoryPageController(inventorymodel));
+
+
     }
 
     @override
     Widget build(BuildContext context) {
+        historyController.updateAgain(inventorymodel);
         return Scaffold(
             body: Column(
                 children: [
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(16,16,16,10),
+                        child:  Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                            Text("History",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+                            GestureDetector(
+                                onTap: ()async{
+                                    var response  = await makeGetRequest("/Inventory/GetInventory");
+                                    if(response!=null) historyController.updateAgain(Inventorymodel.fromJson(response.data));
+                                },
+                                child: Icon(Icons.refresh,color: primaryColor,),)
+                        ],)),
                     Expanded(child:
                         Obx(() => ListView.builder(
                             itemCount:  historyController.matches.value.length,
                             itemBuilder: (context, index) {
+                                // historyController.updateAgain(inventorymodel);
                                 final Matches match = historyController.matches.value[index];
                                 final List<dynamic> details = historyController.CreateScoreCard(match);
                                 return Card(
