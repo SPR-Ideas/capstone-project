@@ -44,3 +44,21 @@ jobs:
 
           # Build and push container 4
           docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/matches:latest ./Matches/Matches
+          
+  execute_commands:
+    needs : build_and_publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect to VM via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: 172.190.178.221
+          username: ${{ secrets.AZURE_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker-compose down
+            sudo docker-compose pull
+            sudo docker-compose --up -d 
+            
+      
+        
