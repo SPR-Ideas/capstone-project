@@ -9,6 +9,7 @@ on:
       - Matches/Matches/**
     branches:
       - main
+      - workflow
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
