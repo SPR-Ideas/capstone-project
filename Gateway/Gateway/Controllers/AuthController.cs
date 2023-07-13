@@ -52,5 +52,12 @@ namespace Gateway.Controllers
             );
             return Ok(result);
         }
+
+    [HttpGet("helloworld")]
+    public async Task<IActionResult> hellworld(){
+        return Ok("helloworld");
     }
+
+    }
+
 }
