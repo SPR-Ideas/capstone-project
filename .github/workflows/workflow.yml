@@ -3,10 +3,10 @@ name: Build and Publish Docker Images
 on:
   push:
     paths:
-      - '/Auths/Auths/**'
-      - '/inventory/inventory/**'
-      - '/Gateway/Gateway/**'
-      - '/Matches/Matches/**'
+      - 'Auths/Auths/**'
+      - 'inventory/inventory/**'
+      - 'Gateway/Gateway/**'
+      - 'Matches/Matches/**'
     branches:
       - main
 
