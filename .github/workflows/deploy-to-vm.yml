@@ -14,11 +14,6 @@ jobs:
           host: 172.190.178.221
           username: ${{ secrets.AZURE_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Execute Commands on VM
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
-          ssh -i private_key.pem 172.190.178.221@${{ secrets.AZURE_USERNAME }} <<EOF
-          touch newfile.txt
-          EOF
+          script: echo hello world > hello.txt
+      
+        
