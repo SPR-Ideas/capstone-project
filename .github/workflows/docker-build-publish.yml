@@ -1,0 +1,41 @@
+name: Build and Publish Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  CONTAINER_REGISTRY: gullycricket.azurecr.io
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Container Registry
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $CONTAINER_REGISTRY
+
+      - name: Build and push Docker images
+        run: |
+          docker buildx create --use
+
+          # Build and push container 1
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/auth:latest ./Auth/Auth
+
+          # Build and push container 2
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/inventory:latest ./inventory/inventory
+
+          # Build and push container 3
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/gateway:latest ./Gateway/Gateway
+
+          # Build and push container 4
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/matches:latest ./Matches/Matches
