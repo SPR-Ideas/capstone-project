@@ -59,6 +59,7 @@ class homeWidget extends HookWidget {
           GestureDetector(
             onTap: () => {
                 Storage.WriteValue("token", ""),
+                Get.deleteAll(),
                 Get.to(loginPage())
             },
             child: Icon(Icons.logout)

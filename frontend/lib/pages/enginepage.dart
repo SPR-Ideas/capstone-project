@@ -46,6 +46,7 @@ Future<List<int>> GetCurrentPlayers(
             strikerID
             )async
     {
+    print("get Current players called");
     if(isFreshInnings(innings.value)){
         await Get.dialog(
             PlayerSelectionDialog(
@@ -89,8 +90,9 @@ class CricketController extends GetxController {
     late Rx<BattingStats> nonStriker = BattingStats().obs;
     late Rx<BlowingStats> blower = BlowingStats().obs;
 
-    void swapBatsmen() {
+    void swapBatsmen({bool isfirst=false}) {
         StrikerId.value = nonStriker.value.id;
+        if(!isfirst)
         GetCurrentPlayers(currentInnings,striker,nonStriker,blower,stateChange,otherInnings,StrikerId);
     }
 
@@ -102,7 +104,8 @@ class CricketController extends GetxController {
 
         if((currentInnings.value.balls)%6==0 && currentInnings.value.balls!=0&& stateChange.value==0){
             Rx<BlowingStats> newBl = BlowingStats().obs;
-            await Get.dialog( NextOver(
+            if(currentInnings.value.balls/6< currentInnings.value.totalOver){
+                await Get.dialog( NextOver(
                 // currentBlowerList: currentBlowerList,
                 newBlowerList: otherInnings.value.blowingStats!.where((element) => element.isCurrent==0).toList(),
                 // currentBl_: currentBl_,
@@ -118,6 +121,8 @@ class CricketController extends GetxController {
             await makeServercall(this);
 
 
+            }
+
         }
         stateChange.value=0;
         GetCurrentPlayers(currentInnings,striker,nonStriker,blower,stateChange,otherInnings,StrikerId);
@@ -131,6 +136,13 @@ class CricketController extends GetxController {
   RxBool isByes = false.obs;
   RxBool isWicket = false.obs;
 
+  void clearOptions(){
+    isWide.value = false;
+    isByes.value = false;
+    isNoBall.value = false;
+    isWicket.value = false;
+  }
+
   String getOptions(){
     if(isWide.value)return "WD";
     else if(isNoBall.value)return "NB";
@@ -141,8 +153,10 @@ class CricketController extends GetxController {
 
     void addRuns(int runs)async{
         var options = getOptions();
+        clearOptions();
 
-        if(options=="WK"){
+        if(options=="WK" && currentInnings.value.wickets+1 < currentInnings.value.battingStats!.length-1 ){
+
             Rx<BattingStats> current = BattingStats().obs;
             Rx<BattingStats> newBt_ = BattingStats().obs;
             await Get.dialog(fallofWicket(
@@ -160,6 +174,8 @@ class CricketController extends GetxController {
                 });
 
             print(response!.data);
+
+
         }
 
         var response = await makePutRequest("/ScoreCard/UpdateEachBall",{
@@ -170,11 +186,14 @@ class CricketController extends GetxController {
             "blowerName": blower.value.displayNames,
             "options": options
         });
+
+
         if(response!.data["status"]==true){
             makeServercall(this);
         }
         if(runs%2!=0){
-            swapBatsmen();
+            print("swap Called");
+            swapBatsmen(isfirst: true);
         }
     }
   void toggleWide(bool? value) {
@@ -304,6 +323,7 @@ class CricketCounterPage extends HookWidget {
                                     Text("6",style: TextStyle(fontWeight: FontWeight.w500,color:Colors.black54),),
                                     SizedBox(width: 40,),
                                     Text("SR",style: TextStyle(fontWeight: FontWeight.w500,color:Colors.black54),),
+                                    SizedBox(width:10),
                                 ],
                             )
 
@@ -314,8 +334,14 @@ class CricketCounterPage extends HookWidget {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                           Obx(() => Text(cricketController.striker.value.displayName)) ,
-                            SizedBox(width: 40,),
+                           Obx(() => Container(
+                                    width: 100,
+                                    child:Text(
+                                        cricketController.striker.value.displayName,
+                                        overflow: TextOverflow.ellipsis,
+                                        )
+                                    )) ,
+                            // SizedBox(width: 40,),
                             Row(
 
                                 children: [
@@ -327,7 +353,8 @@ class CricketCounterPage extends HookWidget {
                                     SizedBox(width: 33,),
                                     Obx(() => Text(cricketController.striker.value.sixer.toString())), // 6s
                                     SizedBox(width:30),
-                                    Obx(() => Text("${(((cricketController.striker.value.runs)/(cricketController.striker.value.balls))*100).toStringAsFixed(1)}")), // Sr
+                                    Obx(() =>  Text("${(((cricketController.striker.value.runs)/(cricketController.striker.value.balls))*100).toStringAsFixed(1)}")), // Sr
+                                    // SizedBox(width:15),
                                 ]
                             )
                         ],),
@@ -336,8 +363,13 @@ class CricketCounterPage extends HookWidget {
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                           Obx(() => Text(cricketController.nonStriker.value.displayName)) ,
-                            SizedBox(width: 40,),
+                           Obx(() => Container(
+                                    width: 100,
+                                    child:  Text(
+                                        cricketController.nonStriker.value.displayName,
+                                        overflow:  TextOverflow.ellipsis,
+                                        )) ),
+                            // SizedBox(width: 40,),
                             Row(
                                 children: [
                                    Obx(() => Text(cricketController.nonStriker.value.runs.toString())),  // Runs
@@ -348,7 +380,8 @@ class CricketCounterPage extends HookWidget {
                                     SizedBox(width: 33,),
                                     Obx(() => Text(cricketController.nonStriker.value.sixer.toString())), // 6s
                                     SizedBox(width:30,),
-                                    Obx(() => Text("${(((cricketController.nonStriker.value.runs)/(cricketController.nonStriker.value.balls))*100).toStringAsFixed(1)}")), // Sr
+                                     Obx(() =>  Text("${(((cricketController.nonStriker.value.runs)/(cricketController.nonStriker.value.balls))*100).toStringAsFixed(1)}")), // Sr
+                                    // SizedBox(width:15),
                                 ]
                             )
                         ],),

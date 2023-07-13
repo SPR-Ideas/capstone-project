@@ -54,7 +54,7 @@ class searchteamPage extends StatelessWidget {
             child:  TextField(
               controller: searchController.serchEditor,
               decoration: InputDecoration(
-                labelText: 'Search users',
+                labelText: 'Search Teams',
                 suffixIcon: IconButton(
                   icon: Icon(Icons.search),
                   onPressed : searchController.updateSearchQuery,

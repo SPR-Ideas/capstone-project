@@ -86,6 +86,7 @@ class MatchControlller extends GetxController{
                 if(response.data!=null){
                     if(response.data["status"]){
                         Snackbar("Match Created Successfully","",Colors.green.shade300);
+                        Get.delete<MatchControlller>();
                         Get.to( CricketCounterPage(ScoreCardId: response.data["scoreCardId"],));
                     }
                     else{
