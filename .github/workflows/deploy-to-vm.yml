@@ -17,4 +17,5 @@ jobs:
 
       - name: Execute Commands on VM
         run: |
-          touch newfile.txt
+          pwd 
+          ls
