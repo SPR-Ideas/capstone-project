@@ -1,12 +1,8 @@
 name: Execute Commands on VM
 
-
 on:
-  workflow_run:
-    workflows:
-      - "build_and_publish"
-    types:
-      - completed
+  push
+ 
 jobs:
   execute_commands:
     runs-on: ubuntu-latest
