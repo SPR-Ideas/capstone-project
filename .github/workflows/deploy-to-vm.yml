@@ -6,7 +6,6 @@ on:
 jobs:
   execute_commands:
     runs-on: ubuntu-latest
-
     steps:
       - name: Connect to VM via SSH
         uses: appleboy/ssh-action@master
@@ -14,6 +13,9 @@ jobs:
           host: 172.190.178.221
           username: ${{ secrets.AZURE_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: echo hello world > hello.txt
+          script: |
+            sudo docker-compose down
+            sudo docker-compose up --build
+            
       
         
