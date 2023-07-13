@@ -4,6 +4,8 @@ using Auth.Core;
 using Microsoft.EntityFrameworkCore;
 namespace Auth
 {
+    //simple change
+
     public static class Program
     {
         public static void Main(string[] args)
