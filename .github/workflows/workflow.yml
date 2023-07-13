@@ -2,11 +2,11 @@ name: Build and Publish Docker Images
 
 on:
   push:
-    paths: 
-      - /Auths/Auths/**
-      - /inventory/inventory/**
-      - /Gateway/Gateway/**
-      - /Matches/Matches/**
+    paths:
+      - '/Auths/Auths/**'
+      - '/inventory/inventory/**'
+      - '/Gateway/Gateway/**'
+      - '/Matches/Matches/**'
     branches:
       - main
 
@@ -44,7 +44,7 @@ jobs:
 
           # Build and push container 4
           docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/matches:latest ./Matches/Matches
-          
+
   execute_commands:
     needs : build_and_publish
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
           script: |
             sudo docker-compose down
             sudo docker-compose pull
-            sudo docker-compose --up -d 
-            
-      
-        
+            sudo docker-compose --up -d
+
+
+

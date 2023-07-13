@@ -6,7 +6,7 @@ namespace inventory.Core
         Task<bool> Add(T entity); // Adds to the Database
         bool Remove(T entity); // Removes from the Database
         Task<T?> Update(T entity); // Update the Database
-        Task<T?> GetById(int Id); // Get entity by Id.
-      
+        Task<T?> GetById(int Id); // Get entity by ID.
+
     }
 }
