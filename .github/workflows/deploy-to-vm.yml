@@ -21,3 +21,4 @@ jobs:
           chmod 600 private_key.pem
           ssh -i private_key.pem 172.190.178.221@${{ secrets.AZURE_USERNAME }} <<EOF
           touch newfile.txt
+          EOF
