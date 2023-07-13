@@ -11,6 +11,25 @@ import '../models/inventoryModels.dart';
 import '../widgets/FreshInning.dart';
 import '../widgets/Snackbar.dart';
 import '../widgets/fallofWickte.dart';
+import '../widgets/resultdecaration.dart';
+
+String GetTeamName(HostTeamInnings innings,ScoreCard scorecard){
+    return scorecard.hostTeamId == innings.id? scorecard.hostTeamName:scorecard.visitorTeamName;
+}
+
+Future<void> DeclareResult(HostTeamInnings currentInning,HostTeamInnings otherInning,ScoreCard scorecard)async{
+    print("Called");
+    // Current Inning Second Batting Other Innings First Batting.
+    String Content = "";
+    HostTeamInnings victoryTeamInnings = (currentInning.score>otherInning.score)?currentInning:otherInning;
+    if(victoryTeamInnings.id== currentInning.id){
+        Content = "${GetTeamName(victoryTeamInnings,scorecard)} won by ${(currentInning.battingStats!.length-1)-currentInning.wickets}";
+    }
+    else{
+        Content = "${GetTeamName(victoryTeamInnings,scorecard)} won by ${(victoryTeamInnings.score - currentInning.score)}";
+    }
+    await Get.dialog(ResultDialog(content: Content,),transitionDuration: Duration(milliseconds: 500));
+}
 
 Future<int> makeServercall(CricketController controller)async{
     var response = await makeGetRequest("/ScoreCard/GetScoreCard?Id=${controller.scorecard.value.id}");
@@ -120,12 +139,24 @@ class CricketController extends GetxController {
             stateChange.value = 1;
             await makeServercall(this);
 
-
             }
 
         }
         stateChange.value=0;
         GetCurrentPlayers(currentInnings,striker,nonStriker,blower,stateChange,otherInnings,StrikerId);
+        if(
+                currentInnings.value.isInningsCompleted&&
+                otherInnings.value.isInningsCompleted
+                )
+                {
+                    DeclareResult(
+                        currentInnings.value,
+                        otherInnings.value,
+                        scorecard.value
+                        );
+                }
+
+
         }
   // RxInt inningsScore = 0.obs;
   // RxInt wickets = 0.obs;
@@ -235,8 +266,13 @@ class CricketCounterPage extends HookWidget {
                     Snackbar("Server Not Resonding","",Colors.red.shade300)
                 }
                 },);
+
+
             return null;
             },[]);
+
+            // checks for result declaration
+
 
         return Scaffold(
         appBar:  AppBar(
