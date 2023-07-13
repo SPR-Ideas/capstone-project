@@ -19,7 +19,7 @@ jobs:
   build_and_publish:
     runs-on: ubuntu-latest
 
-    steps:
+        steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -29,22 +29,23 @@ jobs:
       - name: Log in to Container Registry
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $CONTAINER_REGISTRY
 
+      - name: Determine modified microservices
+        id: determine_microservices
+        run: |
+          # Get the list of modified microservice directories
+          modified_dirs=$(git diff --name-only HEAD~1 HEAD | grep -oE 'Auth/Auth|inventory/inventory|Gateway/Gateway|Matches/Matches')
+          echo "::set-output name=modified_dirs::$modified_dirs"
+
       - name: Build and push Docker images
         run: |
           docker buildx create --use
 
-          # Build and push container 1
-          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/auth:latest ./Auth/Auth
-
-          # Build and push container 2
-          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/inventory:latest ./inventory/inventory
-
-          # Build and push container 3
-          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/gateway:latest ./Gateway/Gateway
-
-          # Build and push container 4
-          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/matches:latest ./Matches/Matches
-
+          # Build and push modified microservices
+          for dir in ${{ steps.determine_microservices.outputs.modified_dirs }}
+          do
+            docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/microservices/${dir,,}:latest ./$dir
+          done
+          
   execute_commands:
     needs : build_and_publish
     runs-on: ubuntu-latest
@@ -58,7 +59,7 @@ jobs:
           script: |
             sudo docker-compose down
             sudo docker-compose pull
-            sudo docker-compose --up -d
+            sudo docker-compose up -d
 
 
 

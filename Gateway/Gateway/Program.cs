@@ -7,7 +7,7 @@ using MatchProto = Matches.Protos.Matches;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-
+// Changes made.
 namespace Gateway
 {
     public static class  Program
