@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:frontend/pages/scorecardpage.dart';
 import 'package:frontend/utils/constant.dart';
 import 'package:frontend/widgets/nextOver.dart';
 import 'package:get/get.dart';
@@ -279,6 +280,13 @@ class CricketCounterPage extends HookWidget {
             title: Obx (() => Text("${cricketController.scorecard.value.hostTeamName} Vs ${cricketController.scorecard.value.visitorTeamName}")),
             centerTitle: true,
             backgroundColor: primaryColor,
+            actions: [
+                GestureDetector(
+                    child: Icon(Icons.scoreboard),
+                    onTap: (){Get.to(ScorePage(scoreCard: cricketController.scorecard.value));},
+                )
+
+            ],
 
             ),
         body: SingleChildScrollView(child:  Padding(
@@ -383,9 +391,9 @@ class CricketCounterPage extends HookWidget {
                                 children: [
                                    Obx(() => Text(cricketController.striker.value.runs.toString())),  // Runs
                                     SizedBox(width: 35,),
-                                    Obx(() => Text(cricketController.striker.value.balls.toString())) ,                                   SizedBox(width: 28,),
+                                    Obx(() => Text(cricketController.striker.value.balls.toString())) , // balls                                   SizedBox(width: 28,),
                                     SizedBox(width: 10,),
-                                    Obx(() => Text(cricketController.striker.value.four.toString())),
+                                    Obx(() => Text(cricketController.striker.value.four.toString())),//fours
                                     SizedBox(width: 33,),
                                     Obx(() => Text(cricketController.striker.value.sixer.toString())), // 6s
                                     SizedBox(width:30),
@@ -472,7 +480,7 @@ class CricketCounterPage extends HookWidget {
                                     SizedBox(width: 35,),
                                     Obx(()=>Text(cricketController.blower.value.wickets.toString())),
                                     SizedBox(width: 35,),
-                                    Obx(()=>Text( (cricketController.blower.value.runs/ cricketController.blower.value.ballsBlowed).toStringAsFixed(2))),
+                                    Obx(()=>Text( (cricketController.blower.value.runs/ (cricketController.blower.value.ballsBlowed/6)).toStringAsFixed(2))),
                                 ],
                             )
 

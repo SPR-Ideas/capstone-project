@@ -39,18 +39,18 @@ class HistoryPageController  extends GetxController {
         late HostTeamInnings? TeamB;
         late String Result = "";
 
-        if( scoreCard.isHostInnings && !scoreCard!.visitorTeamInnings!.isInningsCompleted ){
-            TeamA = scoreCard!.hostTeamInnings;
+        if( scoreCard.isHostInnings && !scoreCard.visitorTeamInnings!.isInningsCompleted ){
+            TeamA = scoreCard.hostTeamInnings;
             TeamAName = scoreCard.hostTeamName;
             TeamB = scoreCard.visitorTeamInnings;
             TeamBName = scoreCard.visitorTeamName;
         }
 
-        if(!scoreCard.isHostInnings && scoreCard!.hostTeamInnings!.isInningsCompleted ){
+        if(!scoreCard.isHostInnings && scoreCard.hostTeamInnings!.isInningsCompleted ){
             TeamB = scoreCard.hostTeamInnings;
             TeamBName = scoreCard.hostTeamName;
 
-            TeamA = scoreCard!.visitorTeamInnings;
+            TeamA = scoreCard.visitorTeamInnings;
             TeamAName = scoreCard.visitorTeamName;
         }
 
@@ -58,7 +58,7 @@ class HistoryPageController  extends GetxController {
         if(match.isCompleted){
             if(scoreCard.isHostInnings){
 
-                TeamA = scoreCard!.hostTeamInnings;
+                TeamA = scoreCard.hostTeamInnings;
                 TeamAName = scoreCard.hostTeamName;
                 TeamB = scoreCard.visitorTeamInnings;
                 TeamBName = scoreCard.visitorTeamName;
